@@ -81,15 +81,19 @@
 		
 			<div id="dateTime3">00:01</div>
 				<script>
-					let seconds = 6000;
-					setInterval(function() {
-					seconds++;
-					let mins = Math.floor(seconds / 60);
-					let secs = seconds % 60;
-					document.getElementById('dateTime3').innerHTML =(mins < 10 ? '0' : '') + mins + ':' + (secs < 10 ? '0' : '') + secs;
-					}
-					, 1000);
-				</script>
+    let seconds = 6000; // thời gian bắt đầu (tính bằng giây)
+    setInterval(function () {
+        seconds++;
+        let hrs = Math.floor(seconds / 3600);
+        let mins = Math.floor((seconds % 3600) / 60);
+        let secs = seconds % 60;
+
+        document.getElementById('dateTime3').innerHTML =
+            (hrs < 10 ? '0' : '') + hrs + ':' +
+            (mins < 10 ? '0' : '') + mins + ':' +
+            (secs < 10 ? '0' : '') + secs;
+              }, 1000);
+                 </script>
 		</div>
 	</div>
 	
