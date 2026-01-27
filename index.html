@@ -2,10 +2,8 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="Content-Type" content="text/html; charset=GBK">
-    <title>员工码</title>
-    
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>员工码</title>
     
     <meta name="apple-mobile-web-app-title" content="员工码">
     <link rel="apple-touch-icon" href="./icon.png">
@@ -13,7 +11,6 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
 
     <style>
-        /* Toàn bộ định dạng để giống hình mẫu 100% */
         body {
             background-image: url("./IMG_8622.jpeg");
             background-size: cover;
@@ -24,112 +21,112 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            background-color: #2b2b3b;
+            font-family: -apple-system, system-ui, sans-serif;
         }
 
         .zhengti {
-            width: 92%;
-            max-width: 360px;
-            margin-top: 30px;
+            width: 90%;
+            max-width: 350px;
+            margin-top: 40px;
             display: flex;
             flex-direction: column;
             align-items: center;
         }
 
-        .name-tag {
+        .user-info {
             color: #fdbd10;
-            font-size: 18px;
-            margin-bottom: 15px;
+            font-size: 17px;
+            margin-bottom: 20px;
+            letter-spacing: 0.5px;
         }
 
-        /* KHUNG CHÍNH - Chứa thanh vàng và phần trắng */
-        .main-card {
+        /* KHUNG THẺ CHÍNH */
+        .card {
             width: 100%;
             background-color: #fff;
-            border-radius: 15px;
-            overflow: hidden; /* Cắt bỏ phần thừa ra ngoài bo góc */
+            border-radius: 15px; /* Bo góc toàn bộ thẻ */
+            overflow: hidden;
             position: relative;
             display: flex;
             flex-direction: column;
-            align-items: center;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
 
-        /* Thanh tiêu đề vàng */
-        .header-yellow {
-            width: 100%;
+        /* TIÊU ĐỀ VÀNG - Phẳng phía dưới để nối vào phần trắng */
+        .card-header {
             background-color: #fdbd10;
             color: #fff;
-            padding: 18px 0;
+            padding: 22px 10px;
             text-align: center;
             font-size: 16px;
             font-weight: bold;
+            line-height: 1.4;
+            border-radius: 15px 15px 0 0; /* Chỉ bo góc trên */
         }
 
-        /* Hai lỗ khuyết tròn */
-        .punch-hole {
-            width: 20px;
-            height: 20px;
-            background-color: #1a1a2e; /* Trùng màu nền để giả lỗ khuyết */
-            border-radius: 50%;
-            position: absolute;
-            top: 45px; /* Nằm ngay khớp nối vàng-trắng */
-            z-index: 10;
-        }
-        .left-hole { left: -10px; }
-        .right-hole { right: -10px; }
-
-        /* Phần chứa QR */
-        .content-area {
-            width: 100%;
-            padding: 20px;
+        /* PHẦN NỘI DUNG TRẮNG */
+        .card-body {
+            padding: 20px 10px;
             display: flex;
             flex-direction: column;
             align-items: center;
-            box-sizing: border-box;
+            position: relative;
         }
 
-        .time-now {
-            font-size: 20px;
+        /* HAI LỖ KHUYẾT TRÒN ĐÚNG TỈ LỆ */
+        .hole {
+            width: 20px;
+            height: 20px;
+            background-color: #2b2b3b; /* Màu tối của nền */
+            border-radius: 50%;
+            position: absolute;
+            top: -10px; /* Đặt chính giữa đường kẻ nối */
+            z-index: 5;
+        }
+        .hole-left { left: -10px; }
+        .hole-right { right: -10px; }
+
+        .date-time {
+            font-size: 21px;
             color: #333;
-            margin-bottom: 10px;
+            margin-bottom: 15px;
             font-weight: 500;
         }
 
-        /* Ép mã QR nằm gọn trong khung trắng */
-        .qr-image {
-            width: 85% !important;
-            max-width: 240px !important;
-            height: auto !important;
+        /* MÃ QR - Đã thu nhỏ để nằm lọt thỏm trong viền trắng */
+        .qr-code {
+            width: 70% !important; 
+            max-width: 210px;
+            height: auto;
             margin: 10px 0;
         }
 
-        .refresh-text {
-            color: #888;
+        .refresh-link {
+            color: #8e8e93;
             font-size: 18px;
             text-decoration: none;
-            margin: 10px 0;
+            margin-top: 15px;
         }
 
-        .status-active {
-            color: #2ecc71;
-            font-size: 28px;
+        .status-text {
+            color: #34c759; /* Màu xanh lá chuẩn */
+            font-size: 30px;
             font-weight: bold;
             margin-top: 5px;
         }
 
-        .timer {
-            color: #2ecc71;
+        .timer-text {
+            color: #34c759;
             font-size: 20px;
+            margin-top: 2px;
         }
 
-        .footer-note {
-            color: #ccc;
+        .footer-text {
+            color: #a0a0a0;
             font-size: 13px;
             text-align: center;
-            margin-top: 20px;
-            padding: 0 10px;
+            margin-top: 25px;
+            padding: 0 15px;
             line-height: 1.5;
         }
     </style>
@@ -137,39 +134,40 @@
 
 <body>
     <div class="zhengti">
-        <div class="name-tag">V25051817 (Phạm Sơn Dương)</div>
+        <div class="user-info">V25051817 (Phạm Sơn Dương)</div>
         
-        <div class="main-card">
-            <div class="header-yellow" id="biaoti">将二维码对准扫描器扫码进出场</div>
+        <div class="card">
+            <div class="card-header" id="headerTitle">
+                将二维码对准扫描器扫码进出场
+            </div>
             
-            <div class="punch-hole left-hole"></div>
-            <div class="punch-hole right-hole"></div>
+            <div class="card-body">
+                <div class="hole hole-left"></div>
+                <div class="hole hole-right"></div>
 
-            <div class="content-area">
-                <div class="time-now" id="dateTime00"></div>
+                <div class="date-time" id="clockDate"></div>
                 
-                <div id="neirong">
-                    <img class="qr-image" src="./ewm.gif">         
+                <div id="qrContainer">
+                    <img class="qr-code" src="./ewm.gif">         
                 </div>
                 
-                <div id="neirong1">    
-                    <a class="refresh-text" href="#" id="refresh-btn">刷新二维码</a>
+                <div id="refreshArea">    
+                    <a class="refresh-link" href="#">刷新二维码</a>
                 </div>
 
-                <div class="status-active" id="trigger-success">已生效</div>
-
-                <div class="timer" id="dateTime3">00:00</div>
+                <div class="status-text" id="statusBtn">已生效</div>
+                <div class="timer-text" id="stopwatch">00:00</div>
             </div>
         </div>
 
-        <div class="footer-note">
+        <div class="footer-text">
             尊敬的员工您好，您已进入企业涉密区域，出于企业安全考虑，您的手机摄像头将被禁止拍摄，感谢您的配合。
         </div>
     </div>
 
 <script>
-    // Logic cập nhật thời gian
-    function updateTime() {
+    // 1. Cập nhật ngày giờ (Định dạng: YYYY-MM-DD HH:MM:SS)
+    function updateClock() {
         const now = new Date();
         const y = now.getFullYear();
         const m = now.getMonth() + 1;
@@ -177,31 +175,31 @@
         const hh = String(now.getHours()).padStart(2, '0');
         const mm = String(now.getMinutes()).padStart(2, '0');
         const ss = String(now.getSeconds()).padStart(2, '0');
-        
-        document.getElementById('dateTime00').innerHTML = `${y}-${m}-${d} ${hh}:${mm}:${ss}`;
+        document.getElementById('clockDate').innerText = `${y}-${m}-${d} ${hh}:${mm}:${ss}`;
     }
-    setInterval(updateTime, 1000);
-    updateTime();
+    setInterval(updateClock, 1000);
+    updateClock();
 
-    // Nhấn 5 lần hiện tích xanh
-    let clicks = 0;
-    document.getElementById('trigger-success').onclick = function() {
-        clicks++;
-        if(clicks >= 5) {
-            document.getElementById('biaoti').innerText = "您的设备已符合安全规范";
-            document.getElementById('neirong').innerHTML = "<img src='./true.png' style='width:100px;margin:20px;'>";
-            document.getElementById('neirong1').style.display = "none";
+    // 2. Đồng hồ đếm giây (Stopwatch)
+    let startTime = Date.now();
+    setInterval(() => {
+        let elapsed = Math.floor((Date.now() - startTime) / 1000);
+        let mins = String(Math.floor(elapsed / 60)).padStart(2, '0');
+        let secs = String(elapsed % 60).padStart(2, '0');
+        document.getElementById('stopwatch').innerText = `${mins}:${secs}`;
+    }, 1000);
+
+    // 3. Logic nhấn 5 lần vào "已生效"
+    let clickCount = 0;
+    document.getElementById('statusBtn').onclick = function() {
+        clickCount++;
+        if (clickCount >= 5) {
+            document.getElementById('headerTitle').innerText = "您的设备已符合安全规范";
+            document.getElementById('qrContainer').innerHTML = "<img src='./true.png' style='width:90px;margin:30px;'>";
+            document.getElementById('refreshArea').style.display = "none";
+            clickCount = 0;
         }
     };
-
-    // Đồng hồ chạy từ khi mở
-    let start = Date.now();
-    setInterval(() => {
-        let diff = Math.floor((Date.now() - start) / 1000);
-        let m = String(Math.floor(diff / 60)).padStart(2, '0');
-        let s = String(diff % 60).padStart(2, '0');
-        document.getElementById('dateTime3').innerText = m + ":" + s;
-    }, 1000);
 </script>
 </body>
 </html>
