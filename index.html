@@ -109,7 +109,7 @@
         }, 1000);
     }
 
-    // 4. LOGIC ĐỒNG HỒ
+    // 4. LOGIC ĐỒNG HỒ ĐẾM (LƯU TRỮ TRÊN TRÌNH DUYỆT)
     let startTime = localStorage.getItem("startTime") || Date.now();
     localStorage.setItem("startTime", startTime);
 
@@ -122,6 +122,7 @@
         document.getElementById('dateTime3').innerHTML = timeStr;
     }, 1000);
 
+    // Click 3 lần vào Refresh để reset đồng hồ
     let reloadClicks = [];
     document.querySelector('.shuaxinerweima').addEventListener('click', function (e) {
         e.preventDefault();
