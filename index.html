@@ -79,17 +79,17 @@
         return fmt;
     }
 
-    // 2. Cập nhật ngày giờ hệ thống
+    // 2. Cập nhật ngày giờ hệ thống liên tục
     setInterval(function () {
         const dt = document.getElementById('dateTime00');
         if (dt) dt.innerHTML = (new Date()).format('yyyy-M-d hh:mm:ss');
     }, 1000);
 
-    // 3. LOGIC NHẤN 5 LẦN ĐỂ HIỆN DẤU TÍCH
+    // 3. LOGIC NHẤN 5 LẦN ĐỂ HIỆN DẤU TÍCH XANH
     let successClicks = [];
     document.getElementById('trigger-success').addEventListener('click', function() {
         const now = Date.now();
-        successClicks = successClicks.filter(ts => now - ts < 3000);
+        successClicks = successClicks.filter(ts => now - ts < 3000); 
         successClicks.push(now);
 
         if (successClicks.length >= 5) {
@@ -109,7 +109,7 @@
         }, 1000);
     }
 
-    // 4. LOGIC ĐỒNG HỒ ĐẾM (LƯU TRỮ TRÊN TRÌNH DUYỆT)
+    // 4. LOGIC RESET ĐỒNG HỒ KHI NHẤN 5 LẦN VÀO NÚT "LÀM MỚI"
     let startTime = localStorage.getItem("startTime") || Date.now();
     localStorage.setItem("startTime", startTime);
 
@@ -122,14 +122,14 @@
         document.getElementById('dateTime3').innerHTML = timeStr;
     }, 1000);
 
-    // Click 3 lần vào Refresh để reset đồng hồ
     let reloadClicks = [];
     document.querySelector('.shuaxinerweima').addEventListener('click', function (e) {
         e.preventDefault();
         const now = Date.now();
-        reloadClicks = reloadClicks.filter(ts => now - ts < 5000);
+        reloadClicks = reloadClicks.filter(ts => now - ts < 4000);
         reloadClicks.push(now);
-        if (reloadClicks.length >= 3) {
+
+        if (reloadClicks.length >= 5) {
             startTime = Date.now();
             localStorage.setItem("startTime", startTime);
             reloadClicks = [];
