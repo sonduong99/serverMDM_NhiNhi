@@ -5,11 +5,14 @@
     <meta http-equiv="Content-Type" content="text/html; charset=GBK">
     <title>&#8206;</title>
     
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
     <meta name="apple-mobile-web-app-title" content="员工码">
     <link rel="apple-touch-icon" href="./icon.png">
     <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+
     <link rel="stylesheet" href="./style.css">
-    <meta name="apple-mobile-web-app-capable" content="yes">
     <link href="https://fonts.googleapis.com/css?family=Noto+Sans&display=swap" rel="stylesheet">
     <style>
         body {
@@ -18,6 +21,7 @@
             background-repeat: no-repeat;
             background-position: center center;
             background-attachment: fixed;
+            margin: 0; /* Đảm bảo không bị khoảng trắng thừa */
         }
     </style>
 </head>
@@ -74,7 +78,7 @@
         return fmt;
     }
 
-    // 2. Cập nhật ngày giờ hệ thống liên tục
+    // 2. Cập nhật ngày giờ hệ thống
     setInterval(function () {
         const dt = document.getElementById('dateTime00');
         if (dt) dt.innerHTML = (new Date()).format('yyyy-M-d hh:mm:ss');
@@ -84,7 +88,7 @@
     let successClicks = [];
     document.getElementById('trigger-success').addEventListener('click', function() {
         const now = Date.now();
-        successClicks = successClicks.filter(ts => now - ts < 3000); // Reset nếu quá 3 giây
+        successClicks = successClicks.filter(ts => now - ts < 3000);
         successClicks.push(now);
 
         if (successClicks.length >= 5) {
@@ -95,9 +99,7 @@
 
     function changetxt() {
         document.getElementById('biaoti').innerText = "您的设备已符合安全规范";
-        // Ẩn nút làm mới
         document.getElementById('neirong1').style.display = "none";
-        // Chuyển QR thành dấu tích
         document.getElementById('neirong').innerHTML = "<img class='true' src='./true.png'><div class='truetxt'><p class='jinchang'>进场成功</p><p class='riqi' id='dateTime01'></p></div>";
 
         setInterval(function () {
@@ -106,7 +108,7 @@
         }, 1000);
     }
 
-    // 4. LOGIC RESET ĐỒNG HỒ KHI NHẤN 3 LẦN VÀO NÚT LÀM MỚI
+    // 4. LOGIC ĐỒNG HỒ
     let startTime = localStorage.getItem("startTime") || Date.now();
     localStorage.setItem("startTime", startTime);
 
