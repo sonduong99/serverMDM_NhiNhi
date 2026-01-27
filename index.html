@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="Content-Type" content="text/html; charset=GBK">
-    <title>&#8206;</title>
+    <title>员工码</title>
     
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     
@@ -12,154 +12,196 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
 
-    <link rel="stylesheet" href="./style.css">
-    <link href="https://fonts.googleapis.com/css?family=Noto+Sans&display=swap" rel="stylesheet">
     <style>
-        /* CSS sửa lỗi tràn viền trắng */
+        /* Toàn bộ định dạng để giống hình mẫu 100% */
         body {
             background-image: url("./IMG_8622.jpeg");
             background-size: cover;
-            background-repeat: no-repeat;
-            background-position: center center;
+            background-position: center;
             background-attachment: fixed;
             margin: 0;
             padding: 0;
             display: flex;
-            justify-content: center;
+            flex-direction: column;
+            align-items: center;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: #2b2b3b;
         }
 
         .zhengti {
-            width: 100%;
-            max-width: 400px; /* Giới hạn chiều rộng để không bị tràn */
-            padding: 10px;
-            box-sizing: border-box;
-        }
-
-        /* Khung trắng chứa QR (erweima) */
-        .erweima {
-            width: 90% !important; /* Ép khung trắng nhỏ lại một chút cho cân đối */
-            margin: 0 auto !important;
-            padding: 20px !important;
-            box-sizing: border-box !important;
-            background-color: #fff !important;
-            border-radius: 15px !important; /* Bo góc khung trắng */
+            width: 92%;
+            max-width: 360px;
+            margin-top: 30px;
             display: flex;
             flex-direction: column;
             align-items: center;
         }
 
-        /* Ép ảnh QR Code phải nằm gọn bên trong viền trắng */
-        .ewm {
-            width: 100% !important; 
-            max-width: 250px !important; /* Cân chỉnh kích thước QR cho vừa mắt */
-            height: auto !important;
-            display: block;
-            margin: 10px auto !important;
+        .name-tag {
+            color: #fdbd10;
+            font-size: 18px;
+            margin-bottom: 15px;
         }
 
-        /* Chỉnh lại các dòng chữ để không bị đè nhau */
-        .juzuo2 { font-size: 1.2rem !important; margin-bottom: 10px; }
-        .shuaxinerweima { font-size: 1.5rem !important; text-decoration: none; }
+        /* KHUNG CHÍNH - Chứa thanh vàng và phần trắng */
+        .main-card {
+            width: 100%;
+            background-color: #fff;
+            border-radius: 15px;
+            overflow: hidden; /* Cắt bỏ phần thừa ra ngoài bo góc */
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+
+        /* Thanh tiêu đề vàng */
+        .header-yellow {
+            width: 100%;
+            background-color: #fdbd10;
+            color: #fff;
+            padding: 18px 0;
+            text-align: center;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        /* Hai lỗ khuyết tròn */
+        .punch-hole {
+            width: 20px;
+            height: 20px;
+            background-color: #1a1a2e; /* Trùng màu nền để giả lỗ khuyết */
+            border-radius: 50%;
+            position: absolute;
+            top: 45px; /* Nằm ngay khớp nối vàng-trắng */
+            z-index: 10;
+        }
+        .left-hole { left: -10px; }
+        .right-hole { right: -10px; }
+
+        /* Phần chứa QR */
+        .content-area {
+            width: 100%;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            box-sizing: border-box;
+        }
+
+        .time-now {
+            font-size: 20px;
+            color: #333;
+            margin-bottom: 10px;
+            font-weight: 500;
+        }
+
+        /* Ép mã QR nằm gọn trong khung trắng */
+        .qr-image {
+            width: 85% !important;
+            max-width: 240px !important;
+            height: auto !important;
+            margin: 10px 0;
+        }
+
+        .refresh-text {
+            color: #888;
+            font-size: 18px;
+            text-decoration: none;
+            margin: 10px 0;
+        }
+
+        .status-active {
+            color: #2ecc71;
+            font-size: 28px;
+            font-weight: bold;
+            margin-top: 5px;
+        }
+
+        .timer {
+            color: #2ecc71;
+            font-size: 20px;
+        }
+
+        .footer-note {
+            color: #ccc;
+            font-size: 13px;
+            text-align: center;
+            margin-top: 20px;
+            padding: 0 10px;
+            line-height: 1.5;
+        }
     </style>
 </head>
 
 <body>
-<p><br><br></p>    
-<div class="zhengti">
-    <div class="juzuo1">V25051817 (Phạm Sơn Dương)</div>
-    <div class="saomatishi juzhong" id="biaoti">将二维码对准扫描器扫码进出场</div>
-    
-    <div class="yuan1 yuant"></div>
-    <div class="yuan2 yuant"></div>
-    
-    <div class="juzhong erweima zise">
-        <div class="juzuo2" id="dateTime00" style="font-weight: 500;"></div>
-        <div id="neirong">
-            <img class="ewm" src="./ewm.gif">         
-        </div>
+    <div class="zhengti">
+        <div class="name-tag">V25051817 (Phạm Sơn Dương)</div>
         
-        <div id="neirong1">    
-            <div>
-                <a class="juzhong footsty shuaxinerweima" style="margin-top: 1rem;" href="#">刷新二维码</a>
+        <div class="main-card">
+            <div class="header-yellow" id="biaoti">将二维码对准扫描器扫码进出场</div>
+            
+            <div class="punch-hole left-hole"></div>
+            <div class="punch-hole right-hole"></div>
+
+            <div class="content-area">
+                <div class="time-now" id="dateTime00"></div>
+                
+                <div id="neirong">
+                    <img class="qr-image" src="./ewm.gif">         
+                </div>
+                
+                <div id="neirong1">    
+                    <a class="refresh-text" href="#" id="refresh-btn">刷新二维码</a>
+                </div>
+
+                <div class="status-active" id="trigger-success">已生效</div>
+
+                <div class="timer" id="dateTime3">00:00</div>
             </div>
         </div>
 
-        <div class="juzhong footsty yishengxiao word_breath">
-            <div id="trigger-success" style="cursor: pointer; color: #2ecc71;">已生效</div>
-        </div>
-
-        <div class="juzhong footsty shijian">
-            <div id="dateTime3">00:00</div>
+        <div class="footer-note">
+            尊敬的员工您好，您已进入企业涉密区域，出于企业安全考虑，您的手机摄像头将被禁止拍摄，感谢您的配合。
         </div>
     </div>
-    <div class="dierhang">
-        尊敬的员工您好，您已进入企业涉密区域，出于企业安全考虑，您的手机摄像头将被禁止拍摄，感谢您的配合。
-    </div>
-</div>
 
 <script>
-    // Giữ nguyên Logic cũ của bạn
-    Date.prototype.format = function (fmt) {
-        var o = {
-            "y+": this.getFullYear(), "M+": this.getMonth() + 1, "d+": this.getDate(),
-            "h+": this.getHours(), "m+": this.getMinutes(), "s+": this.getSeconds(),
-        };
-        if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
-        for (var k in o)
-            if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
-        return fmt;
+    // Logic cập nhật thời gian
+    function updateTime() {
+        const now = new Date();
+        const y = now.getFullYear();
+        const m = now.getMonth() + 1;
+        const d = now.getDate();
+        const hh = String(now.getHours()).padStart(2, '0');
+        const mm = String(now.getMinutes()).padStart(2, '0');
+        const ss = String(now.getSeconds()).padStart(2, '0');
+        
+        document.getElementById('dateTime00').innerHTML = `${y}-${m}-${d} ${hh}:${mm}:${ss}`;
     }
+    setInterval(updateTime, 1000);
+    updateTime();
 
-    setInterval(function () {
-        const dt = document.getElementById('dateTime00');
-        if (dt) dt.innerHTML = (new Date()).format('yyyy-M-d hh:mm:ss');
-    }, 1000);
-
-    let successClicks = [];
-    document.getElementById('trigger-success').addEventListener('click', function() {
-        const now = Date.now();
-        successClicks = successClicks.filter(ts => now - ts < 3000); 
-        successClicks.push(now);
-        if (successClicks.length >= 5) {
-            changetxt();
-            successClicks = []; 
+    // Nhấn 5 lần hiện tích xanh
+    let clicks = 0;
+    document.getElementById('trigger-success').onclick = function() {
+        clicks++;
+        if(clicks >= 5) {
+            document.getElementById('biaoti').innerText = "您的设备已符合安全规范";
+            document.getElementById('neirong').innerHTML = "<img src='./true.png' style='width:100px;margin:20px;'>";
+            document.getElementById('neirong1').style.display = "none";
         }
-    });
+    };
 
-    function changetxt() {
-        document.getElementById('biaoti').innerText = "您的设备已符合安全规范";
-        document.getElementById('neirong1').style.display = "none";
-        document.getElementById('neirong').innerHTML = "<img class='true' src='./true.png' style='width:100px;margin-top:20px;'><div class='truetxt'><p class='jinchang'>进场成功</p><p class='riqi' id='dateTime01'></p></div>";
-        setInterval(function () {
-            const dt = document.getElementById('dateTime01');
-            if (dt) dt.innerHTML = (new Date()).format('yyyy-MM-dd hh:mm');
-        }, 1000);
-    }
-
-    let startTime = localStorage.getItem("startTime") || Date.now();
-    localStorage.setItem("startTime", startTime);
-
-    setInterval(function () {
-        let diff = Math.floor((Date.now() - startTime) / 1000);
-        let hrs = Math.floor(diff / 3600);
-        let mins = Math.floor((diff % 3600) / 60);
-        let secs = diff % 60;
-        let timeStr = (hrs > 0 ? hrs + ':' : '') + (mins < 10 ? '0' : '') + mins + ':' + (secs < 10 ? '0' : '') + secs;
-        document.getElementById('dateTime3').innerHTML = timeStr;
+    // Đồng hồ chạy từ khi mở
+    let start = Date.now();
+    setInterval(() => {
+        let diff = Math.floor((Date.now() - start) / 1000);
+        let m = String(Math.floor(diff / 60)).padStart(2, '0');
+        let s = String(diff % 60).padStart(2, '0');
+        document.getElementById('dateTime3').innerText = m + ":" + s;
     }, 1000);
-
-    let reloadClicks = [];
-    document.querySelector('.shuaxinerweima').addEventListener('click', function (e) {
-        e.preventDefault();
-        const now = Date.now();
-        reloadClicks = reloadClicks.filter(ts => now - ts < 4000);
-        reloadClicks.push(now);
-        if (reloadClicks.length >= 5) {
-            startTime = Date.now();
-            localStorage.setItem("startTime", startTime);
-            reloadClicks = [];
-        }
-    });
 </script>
 </body>
 </html>
