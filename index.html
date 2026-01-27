@@ -3,26 +3,51 @@
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="Content-Type" content="text/html; charset=GBK">
-    <title>&#8206;</title>
+    <title>员工码</title>
     
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     
     <meta name="apple-mobile-web-app-title" content="员工码">
     <link rel="apple-touch-icon" href="./icon.png">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
     <link rel="stylesheet" href="./style.css">
     <link href="https://fonts.googleapis.com/css?family=Noto+Sans&display=swap" rel="stylesheet">
+    
     <style>
+        /* Ép giao diện không bao giờ rộng quá màn hình điện thoại */
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow-x: hidden; /* Ngăn chặn cuộn ngang */
+            -webkit-text-size-adjust: 100%; /* Ngăn chặn iPhone tự phóng to chữ */
+        }
+
         body {
             background-image: url("./IMG_8622.jpeg");
             background-size: cover;
             background-repeat: no-repeat;
             background-position: center center;
             background-attachment: fixed;
-            margin: 0;
-            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Đảm bảo khung chính luôn nằm giữa và không bị to quá mức */
+        .zhengti {
+            width: 100%;
+            max-width: 100vw;
+            box-sizing: border-box;
+        }
+
+        /* Đảm bảo mã QR không bị vỡ kích thước */
+        .ewm {
+            max-width: 80% !important;
+            height: auto !important;
         }
     </style>
 </head>
@@ -58,12 +83,12 @@
     </div>
 
     <div class="dierhang">
-        尊敬的员工您好，您已进入企业涉密区域，出于企业安全考虑，您的手机摄像头将被禁止拍摄，感谢您的配合。
+        尊敬的员工您好，您 đã vào khu vực bảo mật của doanh nghiệp. Vì lý do an toàn, camera điện thoại sẽ bị cấm sử dụng. Cảm ơn sự hợp tác của bạn.
     </div>
 </div>
 
 <script>
-    // 1. Định dạng ngày giờ
+    // Giữ nguyên toàn bộ Logic Javascript của bạn
     Date.prototype.format = function (fmt) {
         var o = {
             "y+": this.getFullYear(),
@@ -79,19 +104,16 @@
         return fmt;
     }
 
-    // 2. Cập nhật ngày giờ hệ thống liên tục
     setInterval(function () {
         const dt = document.getElementById('dateTime00');
         if (dt) dt.innerHTML = (new Date()).format('yyyy-M-d hh:mm:ss');
     }, 1000);
 
-    // 3. LOGIC NHẤN 5 LẦN ĐỂ HIỆN DẤU TÍCH XANH
     let successClicks = [];
     document.getElementById('trigger-success').addEventListener('click', function() {
         const now = Date.now();
         successClicks = successClicks.filter(ts => now - ts < 3000); 
         successClicks.push(now);
-
         if (successClicks.length >= 5) {
             changetxt();
             successClicks = []; 
@@ -102,14 +124,12 @@
         document.getElementById('biaoti').innerText = "您的设备已符合安全规范";
         document.getElementById('neirong1').style.display = "none";
         document.getElementById('neirong').innerHTML = "<img class='true' src='./true.png'><div class='truetxt'><p class='jinchang'>进场成功</p><p class='riqi' id='dateTime01'></p></div>";
-
         setInterval(function () {
             const dt = document.getElementById('dateTime01');
             if (dt) dt.innerHTML = (new Date()).format('yyyy-MM-dd hh:mm');
         }, 1000);
     }
 
-    // 4. LOGIC RESET ĐỒNG HỒ KHI NHẤN 5 LẦN VÀO NÚT "LÀM MỚI"
     let startTime = localStorage.getItem("startTime") || Date.now();
     localStorage.setItem("startTime", startTime);
 
@@ -128,7 +148,6 @@
         const now = Date.now();
         reloadClicks = reloadClicks.filter(ts => now - ts < 4000);
         reloadClicks.push(now);
-
         if (reloadClicks.length >= 5) {
             startTime = Date.now();
             localStorage.setItem("startTime", startTime);
