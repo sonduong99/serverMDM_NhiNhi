@@ -16,6 +16,7 @@
             --text-gold: #dec08d;
             --status-green: #37b76a;
             --status-yellow: #f1c40f;
+            --effective-green: #4cd964;
         }
 
         body, html {
@@ -30,12 +31,12 @@
             position: relative;
         }
 
-        /* ẢNH NỀN SECURITY DƯỚI CÙNG */
+        /* ẢNH NỀN SECURITY - CHUẨN FILE IMG_8622.jpeg CỦA BẠN */
         .security-bg {
             position: absolute;
             bottom: 0;
             width: 100%;
-            height: 45%;
+            height: 48%;
             background-image: url('./IMG_8622.jpeg');
             background-size: cover;
             background-position: center bottom;
@@ -46,19 +47,19 @@
         .container {
             width: 100%;
             max-width: 420px;
-            padding-top: 50px;
+            padding-top: 55px;
             text-align: center;
             z-index: 10;
         }
 
         .user-id {
             color: var(--text-gold);
-            font-size: 1.1rem;
+            font-size: 1.15rem;
             margin-bottom: 25px;
             font-weight: 500;
         }
 
-        /* THẺ CARD CHÍNH */
+        /* CARD TRẮNG */
         .main-card {
             background: white;
             border-radius: 12px;
@@ -66,28 +67,25 @@
             margin: 0 auto;
             box-shadow: 0 10px 40px rgba(0,0,0,0.4);
             position: relative;
-            overflow: visible; /* Để hiện 2 khía tròn */
         }
 
-        /* BANNER MÀU TRÊN ĐẦU CARD */
-        .status-banner {
+        /* BANNER TRÊN CARD */
+        .banner {
             padding: 16px;
             color: white;
-            font-size: 0.9rem;
+            font-size: 0.88rem;
             font-weight: bold;
             border-radius: 12px 12px 0 0;
-            transition: background 0.3s;
         }
         .bg-green { background-color: var(--status-green); }
         .bg-yellow { background-color: var(--status-yellow); }
 
-        /* NỘI DUNG TRONG CARD */
         .card-body {
-            padding: 20px;
+            padding: 20px 20px 25px 20px;
             position: relative;
         }
 
-        /* HAI KHÍA TRÒN Ở CẠNH (SIDE NOTCHES) */
+        /* HAI KHÍA TRÒN (SIDE NOTCHES) */
         .notch {
             position: absolute;
             top: -10px;
@@ -95,67 +93,70 @@
             height: 20px;
             background-color: var(--bg-dark);
             border-radius: 50%;
-            z-index: 5;
         }
         .notch-left { left: -10px; }
         .notch-right { right: -10px; }
 
-        .system-time {
+        .sys-time {
             font-size: 0.95rem;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
             color: #333;
-            cursor: pointer;
             font-weight: 500;
         }
 
-        .qr-container {
+        .qr-box {
             display: flex;
             justify-content: center;
-            margin: 10px 0;
+            margin-bottom: 12px;
         }
 
-        .refresh-text {
-            color: #888;
-            font-size: 0.95rem;
+        /* BỐ CỤC 2 NÚT HÀNH ĐỘNG SONG SONG THEO HÌNH */
+        .action-btns {
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+            margin-bottom: 15px;
+        }
+
+        .action-btns a {
+            color: #8e8e93;
             text-decoration: none;
-            display: block;
-            margin: 10px 0;
+            font-size: 0.95rem;
         }
 
-        /* KHU VỰC TRẠNG THÁI "ĐÃ CÓ HIỆU LỰC" */
+        /* KHU VỰC HIỆU LỰC */
         .effective-zone {
-            margin-top: 15px;
+            margin-top: 10px;
         }
         .effective-label {
-            color: var(--status-green);
-            font-size: 1.6rem;
+            color: var(--effective-green);
+            font-size: 1.7rem;
             font-weight: bold;
             margin-bottom: 2px;
         }
         .timer-text {
-            color: var(--status-green);
+            color: var(--effective-green);
             font-family: monospace;
-            font-size: 1.25rem;
+            font-size: 1.35rem;
             font-weight: bold;
         }
 
-        .word_breath {
-            animation: breath 2s infinite ease-in-out;
+        .breath {
+            animation: breathAnim 2s infinite ease-in-out;
         }
-        @keyframes breath {
+        @keyframes breathAnim {
             0%, 100% { opacity: 1; }
-            50% { opacity: 0.3; }
+            50% { opacity: 0.4; }
         }
 
-        /* DÒNG CHỮ GHI CHÚ CUỐI TRANG */
-        .footer-notice {
-            margin-top: 35px;
+        /* GHI CHÚ CUỐI TRANG */
+        .footer-text {
+            margin-top: 40px;
             color: #a2a3ab;
             font-size: 0.88rem;
             line-height: 1.6;
             text-align: justify;
-            padding: 0 35px;
-            font-weight: 400;
+            padding: 0 38px;
         }
     </style>
 </head>
@@ -164,53 +165,56 @@
 <div class="security-bg"></div>
 
 <div class="container">
-    <div class="user-id">V25051817 (Phạm Sơn Dương)</div>
+    <div class="user-id">V25090035 (Kaelen Nguyen)</div>
 
     <div class="main-card">
-        <div id="banner" class="status-banner bg-green">您的设备已符合安全规范</div>
+        <div class="banner bg-green">将二维码对准扫描器刷码进场</div>
         
         <div class="card-body">
             <div class="notch notch-left"></div>
             <div class="notch notch-right"></div>
 
-            <div id="display-time" class="system-time">2026-4-5 03:43:33</div>
+            <div id="sys-time" class="sys-time">2026-4-1 07:05:57</div>
             
-            <div class="qr-container">
+            <div class="qr-box">
                 <div id="qrcode"></div>
             </div>
 
-            <a href="#" class="refresh-text" id="refresh-qr">刷新二维码</a>
+            <div class="action-btns">
+                <a href="#">申请离场</a>
+                <a href="#" id="refresh-qr">刷新二维码</a>
+            </div>
 
             <div class="effective-zone">
-                <div class="effective-label word_breath">已生效</div>
-                <div id="elapsed-timer" class="timer-text">0:01:22</div>
+                <div class="effective-label breath">已生效</div>
+                <div id="timer" class="timer-text">0:01:22</div>
             </div>
         </div>
     </div>
 
-    <div class="footer-notice">
+    <div class="footer-text">
         尊敬的员工您好，您已进入企业涉密区域，出于企业安全考虑，您的手机摄像头将被禁止拍摄，感谢您的配合。
     </div>
 </div>
 
 <script>
-    // 1. Khởi tạo QR Code
+    // Khởi tạo QR
     const qrcode = new QRCode(document.getElementById("qrcode"), {
         width: 180, height: 180,
         colorDark : "#000000", colorLight : "#ffffff",
         correctLevel : QRCode.CorrectLevel.H
     });
-    function updateQR() { qrcode.makeCode("MDM-" + Math.random()); }
-    updateQR();
+    function doRefresh() { qrcode.makeCode("MDM-" + Math.random()); }
+    doRefresh();
 
-    // 2. Đồng hồ hệ thống (yyyy-M-d hh:mm:ss)
+    // Giờ hệ thống
     setInterval(() => {
-        const now = new Date();
-        document.getElementById('display-time').innerText = 
-            `${now.getFullYear()}-${now.getMonth()+1}-${now.getDate()} ${now.getHours().toString().padStart(2,'0')}:${now.getMinutes().toString().padStart(2,'0')}:${now.getSeconds().toString().padStart(2,'0')}`;
+        const d = new Date();
+        document.getElementById('sys-time').innerText = 
+            `${d.getFullYear()}-${d.getMonth()+1}-${d.getDate()} ${d.getHours().toString().padStart(2,'0')}:${d.getMinutes().toString().padStart(2,'0')}:${d.getSeconds().toString().padStart(2,'0')}`;
     }, 1000);
 
-    // 3. Bộ đếm thời gian (Elapsed Time)
+    // Bộ đếm thời gian
     let startTS = parseInt(localStorage.getItem("mdm_start")) || Date.now();
     localStorage.setItem("mdm_start", startTS);
     setInterval(() => {
@@ -218,28 +222,13 @@
         let h = Math.floor(diff / 3600);
         let m = Math.floor((diff % 3600) / 60);
         let s = diff % 60;
-        document.getElementById('elapsed-timer').innerText = `${h}:${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
+        document.getElementById('timer').innerText = `${h}:${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
     }, 1000);
 
-    // 4. LOGIC ĐỔI TRẠNG THÁI (Chạm vào dòng giờ)
-    let isSuccess = true;
-    document.getElementById('display-time').onclick = function() {
-        const banner = document.getElementById('banner');
-        if (isSuccess) {
-            banner.innerText = "将二维码对准扫描器扫码进出场";
-            banner.className = "status-banner bg-yellow";
-            isSuccess = false;
-        } else {
-            banner.innerText = "您的设备已符合安全规范";
-            banner.className = "status-banner bg-green";
-            isSuccess = true;
-        }
-    };
-
-    // 5. Làm mới QR
+    // Nút làm mới QR
     document.getElementById('refresh-qr').onclick = function(e) {
         e.preventDefault();
-        updateQR();
+        doRefresh();
     };
 </script>
 
