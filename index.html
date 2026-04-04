@@ -1,236 +1,61 @@
-<!DOCTYPE html>
-<html lang="vi">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>&#8206;</title>
-    
-    <link href="https://fonts.googleapis.com/css?family=Noto+Sans&display=swap" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-    
-    <style>
-        :root {
-            --bg-dark: #2c2e3d;
-            --text-gold: #dec08d;
-            --status-green: #37b76a;
-            --status-yellow: #f1c40f;
-            --effective-green: #4cd964;
+setInterval(function () {
+        const dt = document.getElementById('dateTime00');
+        if (dt) dt.innerHTML = (new Date()).format('yyyy-M-d hh:mm:ss');
+    }, 1000);
+
+    // 3. LOGIC NHẤN 5 LẦN VÀO "ĐÃ CÓ HIỆU LỰC" ĐỂ HIỆN DẤU TÍCH XANH
+    let successClicks = [];
+    document.getElementById('trigger-success').addEventListener('click', function() {
+        const now = Date.now();
+        successClicks = successClicks.filter(ts => now - ts < 3000); 
+        successClicks.push(now);
+
+        if (successClicks.length >= 5) {
+            changetxt();
+            successClicks = []; 
         }
-
-        body, html {
-            margin: 0; padding: 0;
-            height: 100%;
-            background-color: var(--bg-dark);
-            font-family: 'Noto Sans', sans-serif;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            overflow: hidden;
-            position: relative;
-        }
-
-        /* ẢNH NỀN SECURITY - CHUẨN FILE IMG_8622.jpeg CỦA BẠN */
-        .security-bg {
-            position: absolute;
-            bottom: 0;
-            width: 100%;
-            height: 48%;
-            background-image: url('./IMG_8622.jpeg');
-            background-size: cover;
-            background-position: center bottom;
-            opacity: 0.35;
-            z-index: 0;
-        }
-
-        .container {
-            width: 100%;
-            max-width: 420px;
-            padding-top: 55px;
-            text-align: center;
-            z-index: 10;
-        }
-
-        .user-id {
-            color: var(--text-gold);
-            font-size: 1.15rem;
-            margin-bottom: 25px;
-            font-weight: 500;
-        }
-
-        /* CARD TRẮNG */
-        .main-card {
-            background: white;
-            border-radius: 12px;
-            width: 86%;
-            margin: 0 auto;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.4);
-            position: relative;
-        }
-
-        /* BANNER TRÊN CARD */
-        .banner {
-            padding: 16px;
-            color: white;
-            font-size: 0.88rem;
-            font-weight: bold;
-            border-radius: 12px 12px 0 0;
-        }
-        .bg-green { background-color: var(--status-green); }
-        .bg-yellow { background-color: var(--status-yellow); }
-
-        .card-body {
-            padding: 20px 20px 25px 20px;
-            position: relative;
-        }
-
-        /* HAI KHÍA TRÒN (SIDE NOTCHES) */
-        .notch {
-            position: absolute;
-            top: -10px;
-            width: 20px;
-            height: 20px;
-            background-color: var(--bg-dark);
-            border-radius: 50%;
-        }
-        .notch-left { left: -10px; }
-        .notch-right { right: -10px; }
-
-        .sys-time {
-            font-size: 0.95rem;
-            margin-bottom: 8px;
-            color: #333;
-            font-weight: 500;
-        }
-
-        .qr-box {
-            display: flex;
-            justify-content: center;
-            margin-bottom: 12px;
-        }
-
-        /* BỐ CỤC 2 NÚT HÀNH ĐỘNG SONG SONG THEO HÌNH */
-        .action-btns {
-            display: flex;
-            justify-content: center;
-            gap: 25px;
-            margin-bottom: 15px;
-        }
-
-        .action-btns a {
-            color: #8e8e93;
-            text-decoration: none;
-            font-size: 0.95rem;
-        }
-
-        /* KHU VỰC HIỆU LỰC */
-        .effective-zone {
-            margin-top: 10px;
-        }
-        .effective-label {
-            color: var(--effective-green);
-            font-size: 1.7rem;
-            font-weight: bold;
-            margin-bottom: 2px;
-        }
-        .timer-text {
-            color: var(--effective-green);
-            font-family: monospace;
-            font-size: 1.35rem;
-            font-weight: bold;
-        }
-
-        .breath {
-            animation: breathAnim 2s infinite ease-in-out;
-        }
-        @keyframes breathAnim {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.4; }
-        }
-
-        /* GHI CHÚ CUỐI TRANG */
-        .footer-text {
-            margin-top: 40px;
-            color: #a2a3ab;
-            font-size: 0.88rem;
-            line-height: 1.6;
-            text-align: justify;
-            padding: 0 38px;
-        }
-    </style>
-</head>
-<body>
-
-<div class="security-bg"></div>
-
-<div class="container">
-    <div class="user-id">V25090035 (Kaelen Nguyen)</div>
-
-    <div class="main-card">
-        <div class="banner bg-green">将二维码对准扫描器刷码进场</div>
-        
-        <div class="card-body">
-            <div class="notch notch-left"></div>
-            <div class="notch notch-right"></div>
-
-            <div id="sys-time" class="sys-time">2026-4-1 07:05:57</div>
-            
-            <div class="qr-box">
-                <div id="qrcode"></div>
-            </div>
-
-            <div class="action-btns">
-                <a href="#">申请离场</a>
-                <a href="#" id="refresh-qr">刷新二维码</a>
-            </div>
-
-            <div class="effective-zone">
-                <div class="effective-label breath">已生效</div>
-                <div id="timer" class="timer-text">0:01:22</div>
-            </div>
-        </div>
-    </div>
-
-    <div class="footer-text">
-        尊敬的员工您好，您已进入企业涉密区域，出于企业安全考虑，您的手机摄像头将被禁止拍摄，感谢您的配合。
-    </div>
-</div>
-
-<script>
-    // Khởi tạo QR
-    const qrcode = new QRCode(document.getElementById("qrcode"), {
-        width: 180, height: 180,
-        colorDark : "#000000", colorLight : "#ffffff",
-        correctLevel : QRCode.CorrectLevel.H
     });
-    function doRefresh() { qrcode.makeCode("MDM-" + Math.random()); }
-    doRefresh();
 
-    // Giờ hệ thống
-    setInterval(() => {
-        const d = new Date();
-        document.getElementById('sys-time').innerText = 
-            `${d.getFullYear()}-${d.getMonth()+1}-${d.getDate()} ${d.getHours().toString().padStart(2,'0')}:${d.getMinutes().toString().padStart(2,'0')}:${d.getSeconds().toString().padStart(2,'0')}`;
+    function changetxt() {
+        document.getElementById('biaoti').innerText = "您的设备已符合安全规范";
+        document.getElementById('neirong1').style.display = "none";
+        document.getElementById('neirong').innerHTML = "<img class='true' src='./true.png'><div class='truetxt'><p class='jinchang'>进场成功</p><p class='riqi' id='dateTime01'></p></div>";
+
+        setInterval(function () {
+            const dt = document.getElementById('dateTime01');
+            if (dt) dt.innerHTML = (new Date()).format('yyyy-MM-dd hh:mm');
+        }, 1000);
+    }
+
+    // 4. LOGIC RESET ĐỒNG HỒ KHI NHẤN 5 LẦN VÀO NÚT "LÀM MỚI"
+    let startTime = localStorage.getItem("startTime") || Date.now();
+    localStorage.setItem("startTime", startTime);
+
+    // Hiển thị đồng hồ đếm thời gian đã trôi qua
+    setInterval(function () {
+        let diff = Math.floor((Date.now() - startTime) / 1000);
+        let hrs = Math.floor(diff / 3600);
+        let mins = Math.floor((diff % 3600) / 60);
+        let secs = diff % 60;
+        let timeStr = (hrs > 0 ? hrs + ':' : '') + (mins < 10 ? '0' : '') + mins + ':' + (secs < 10 ? '0' : '') + secs;
+        document.getElementById('dateTime3').innerHTML = timeStr;
     }, 1000);
 
-    // Bộ đếm thời gian
-    let startTS = parseInt(localStorage.getItem("mdm_start")) || Date.now();
-    localStorage.setItem("mdm_start", startTS);
-    setInterval(() => {
-        let diff = Math.floor((Date.now() - startTS) / 1000);
-        let h = Math.floor(diff / 3600);
-        let m = Math.floor((diff % 3600) / 60);
-        let s = diff % 60;
-        document.getElementById('timer').innerText = `${h}:${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
-    }, 1000);
-
-    // Nút làm mới QR
-    document.getElementById('refresh-qr').onclick = function(e) {
+    let reloadClicks = [];
+    document.querySelector('.shuaxinerweima').addEventListener('click', function (e) {
         e.preventDefault();
-        doRefresh();
-    };
-</script>
+        const now = Date.now();
+        // Giới hạn trong 4 giây phải nhấn đủ 5 lần
+        reloadClicks = reloadClicks.filter(ts => now - ts < 4000);
+        reloadClicks.push(now);
 
+        // ĐÃ SỬA: Nhấn đủ 5 lần sẽ reset
+        if (reloadClicks.length >= 5) {
+            startTime = Date.now();
+            localStorage.setItem("startTime", startTime);
+            reloadClicks = [];
+        }
+    });
+</script>
 </body>
 </html>
