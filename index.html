@@ -6,223 +6,242 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <title>&#8206;</title>
+    
     <link href="https://fonts.googleapis.com/css?family=Noto+Sans&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     
     <style>
-        body {
-            background-color: #2b2d42; /* Nền tối giống hình */
-            margin: 0;
-            padding: 0;
+        :root {
+            --bg-dark: #2c2e3d;
+            --text-gold: #dec08d;
+            --status-green: #37b76a;
+            --status-yellow: #f1c40f;
+        }
+
+        body, html {
+            margin: 0; padding: 0;
+            height: 100%;
+            background-color: var(--bg-dark);
             font-family: 'Noto Sans', sans-serif;
             display: flex;
-            justify-content: center;
+            flex-direction: column;
+            align-items: center;
+            overflow: hidden;
+            position: relative;
         }
 
-        .zhengti {
+        /* ẢNH NỀN SECURITY DƯỚI CÙNG */
+        .security-bg {
+            position: absolute;
+            bottom: 0;
             width: 100%;
-            max-width: 400px;
-            padding: 40px 20px;
+            height: 45%;
+            background-image: url('./IMG_8622.jpeg');
+            background-size: cover;
+            background-position: center bottom;
+            opacity: 0.35;
+            z-index: 0;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 420px;
+            padding-top: 50px;
             text-align: center;
+            z-index: 10;
         }
 
-        .juzuo1 {
-            color: #dec08d;
-            font-size: 1.2rem;
+        .user-id {
+            color: var(--text-gold);
+            font-size: 1.1rem;
             margin-bottom: 25px;
+            font-weight: 500;
         }
 
-        .saomatishi {
-            padding: 15px;
+        /* THẺ CARD CHÍNH */
+        .main-card {
+            background: white;
+            border-radius: 12px;
+            width: 86%;
+            margin: 0 auto;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+            position: relative;
+            overflow: visible; /* Để hiện 2 khía tròn */
+        }
+
+        /* BANNER MÀU TRÊN ĐẦU CARD */
+        .status-banner {
+            padding: 16px;
             color: white;
+            font-size: 0.9rem;
             font-weight: bold;
-            font-size: 0.95rem;
             border-radius: 12px 12px 0 0;
             transition: background 0.3s;
         }
+        .bg-green { background-color: var(--status-green); }
+        .bg-yellow { background-color: var(--status-yellow); }
 
-        /* Các lớp màu trạng thái */
-        .bg-green { background-color: #27ae60; }
-        .bg-yellow { background-color: #f1c40f; }
-
-        .erweima {
-            background: white;
+        /* NỘI DUNG TRONG CARD */
+        .card-body {
             padding: 20px;
-            border-radius: 0 0 12px 12px;
-            color: #333;
+            position: relative;
         }
 
-        .juzuo2 {
-            font-size: 0.9rem;
+        /* HAI KHÍA TRÒN Ở CẠNH (SIDE NOTCHES) */
+        .notch {
+            position: absolute;
+            top: -10px;
+            width: 20px;
+            height: 20px;
+            background-color: var(--bg-dark);
+            border-radius: 50%;
+            z-index: 5;
+        }
+        .notch-left { left: -10px; }
+        .notch-right { right: -10px; }
+
+        .system-time {
+            font-size: 0.95rem;
             margin-bottom: 10px;
-            cursor: pointer; /* Cho biết có thể nhấn vào */
+            color: #333;
+            cursor: pointer;
+            font-weight: 500;
         }
 
-        #qrcode {
+        .qr-container {
             display: flex;
             justify-content: center;
-            margin: 15px 0;
+            margin: 10px 0;
         }
 
-        .shuaxinerweima {
+        .refresh-text {
             color: #888;
+            font-size: 0.95rem;
             text-decoration: none;
-            font-size: 0.9rem;
             display: block;
-            margin-bottom: 15px;
+            margin: 10px 0;
         }
 
-        .yishengxiao {
-            color: #27ae60;
+        /* KHU VỰC TRẠNG THÁI "ĐÃ CÓ HIỆU LỰC" */
+        .effective-zone {
+            margin-top: 15px;
+        }
+        .effective-label {
+            color: var(--status-green);
+            font-size: 1.6rem;
             font-weight: bold;
-            font-size: 1.5rem;
-            margin-bottom: 5px;
+            margin-bottom: 2px;
         }
-
-        .shijian {
-            color: #27ae60;
+        .timer-text {
+            color: var(--status-green);
             font-family: monospace;
-            font-size: 1.2rem;
+            font-size: 1.25rem;
             font-weight: bold;
         }
 
         .word_breath {
             animation: breath 2s infinite ease-in-out;
         }
-
         @keyframes breath {
             0%, 100% { opacity: 1; }
             50% { opacity: 0.3; }
         }
 
-        .dierhang {
-            margin-top: 30px;
-            color: #999;
-            font-size: 0.85rem;
+        /* DÒNG CHỮ GHI CHÚ CUỐI TRANG */
+        .footer-notice {
+            margin-top: 35px;
+            color: #a2a3ab;
+            font-size: 0.88rem;
             line-height: 1.6;
             text-align: justify;
+            padding: 0 35px;
+            font-weight: 400;
         }
-
-        /* Success State */
-        .true-icon { font-size: 80px; color: #27ae60; margin: 20px 0; }
-        .jinchang { color: #27ae60; font-size: 1.5rem; font-weight: bold; }
     </style>
 </head>
-
 <body>
-<div class="zhengti">
-    <div class="juzuo1">V25051817 (Phạm Sơn Dương)</div>
-    
-    <div class="saomatishi bg-green" id="biaoti">您的设备已符合安全规范</div>
-    
-    <div class="erweima">
-        <div class="juzuo2" id="dateTime00" style="font-weight: 500;"></div>
-        
-        <div id="neirong">
-            <div id="qrcode"></div>         
-        </div>
-        
-        <div id="neirong1">    
-            <a class="shuaxinerweima" id="btn-refresh" href="#">刷新二维码</a>
-        </div>
 
-        <div class="yishengxiao word_breath" id="trigger-success">已生效</div>
+<div class="security-bg"></div>
 
-        <div class="shijian">
-            <div id="dateTime3">0:00:00</div>
+<div class="container">
+    <div class="user-id">V25051817 (Phạm Sơn Dương)</div>
+
+    <div class="main-card">
+        <div id="banner" class="status-banner bg-green">您的设备已符合安全规范</div>
+        
+        <div class="card-body">
+            <div class="notch notch-left"></div>
+            <div class="notch notch-right"></div>
+
+            <div id="display-time" class="system-time">2026-4-5 03:43:33</div>
+            
+            <div class="qr-container">
+                <div id="qrcode"></div>
+            </div>
+
+            <a href="#" class="refresh-text" id="refresh-qr">刷新二维码</a>
+
+            <div class="effective-zone">
+                <div class="effective-label word_breath">已生效</div>
+                <div id="elapsed-timer" class="timer-text">0:01:22</div>
+            </div>
         </div>
     </div>
 
-    <div class="dierhang">
+    <div class="footer-notice">
         尊敬的员工您好，您已进入企业涉密区域，出于企业安全考虑，您的手机摄像头将被禁止拍摄，感谢您的配合。
     </div>
 </div>
 
 <script>
-    // 1. Khởi tạo QR
+    // 1. Khởi tạo QR Code
     const qrcode = new QRCode(document.getElementById("qrcode"), {
         width: 180, height: 180,
         colorDark : "#000000", colorLight : "#ffffff",
         correctLevel : QRCode.CorrectLevel.H
     });
-    function makeQR() { qrcode.makeCode("MDM-" + Date.now()); }
-    makeQR();
+    function updateQR() { qrcode.makeCode("MDM-" + Math.random()); }
+    updateQR();
 
-    // 2. Định dạng ngày giờ
-    Date.prototype.format = function (fmt) {
-        var o = {
-            "y+": this.getFullYear(),
-            "M+": this.getMonth() + 1,
-            "d+": this.getDate(),
-            "h+": this.getHours(),
-            "m+": this.getMinutes(),
-            "s+": this.getSeconds(),
-        };
-        if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
-        for (var k in o)
-            if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
-        return fmt;
-    }
-
-    // 3. Cập nhật ngày giờ hệ thống
-    setInterval(function () {
-        const dt = document.getElementById('dateTime00');
-        if (dt) dt.innerHTML = (new Date()).format('yyyy-M-d hh:mm:ss');
+    // 2. Đồng hồ hệ thống (yyyy-M-d hh:mm:ss)
+    setInterval(() => {
+        const now = new Date();
+        document.getElementById('display-time').innerText = 
+            `${now.getFullYear()}-${now.getMonth()+1}-${now.getDate()} ${now.getHours().toString().padStart(2,'0')}:${now.getMinutes().toString().padStart(2,'0')}:${now.getSeconds().toString().padStart(2,'0')}`;
     }, 1000);
 
-    // 4. LOGIC CHẠM DÒNG GIỜ ĐỂ ĐỔI MÀU (1 lần -> Vàng, 2 lần -> Xanh)
-    let colorToggle = 0;
-    document.getElementById('dateTime00').addEventListener('click', function() {
-        colorToggle++;
-        const banner = document.getElementById('biaoti');
-        
-        if (colorToggle === 1) {
+    // 3. Bộ đếm thời gian (Elapsed Time)
+    let startTS = parseInt(localStorage.getItem("mdm_start")) || Date.now();
+    localStorage.setItem("mdm_start", startTS);
+    setInterval(() => {
+        let diff = Math.floor((Date.now() - startTS) / 1000);
+        let h = Math.floor(diff / 3600);
+        let m = Math.floor((diff % 3600) / 60);
+        let s = diff % 60;
+        document.getElementById('elapsed-timer').innerText = `${h}:${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
+    }, 1000);
+
+    // 4. LOGIC ĐỔI TRẠNG THÁI (Chạm vào dòng giờ)
+    let isSuccess = true;
+    document.getElementById('display-time').onclick = function() {
+        const banner = document.getElementById('banner');
+        if (isSuccess) {
             banner.innerText = "将二维码对准扫描器扫码进出场";
-            banner.className = "saomatishi bg-yellow";
+            banner.className = "status-banner bg-yellow";
+            isSuccess = false;
         } else {
             banner.innerText = "您的设备已符合安全规范";
-            banner.className = "saomatishi bg-green";
-            colorToggle = 0;
-        }
-    });
-
-    // 5. Logic nhấn 5 lần vào "Đã có hiệu lực" để hiện tích xanh thành công
-    let successClicks = 0;
-    document.getElementById('trigger-success').onclick = function() {
-        successClicks++;
-        if (successClicks >= 5) {
-            document.getElementById('biaoti').innerText = "您的设备已符合安全规范";
-            document.getElementById('biaoti').className = "saomatishi bg-green";
-            document.getElementById('neirong').innerHTML = "<div class='true-icon'>✓</div><div class='jinchang'>进场成功</div>";
-            document.getElementById('neirong1').style.display = "none";
-            successClicks = 0;
+            banner.className = "status-banner bg-green";
+            isSuccess = true;
         }
     };
 
-    // 6. Đồng hồ đếm thời gian trôi qua
-    let startTime = localStorage.getItem("startTime") || Date.now();
-    localStorage.setItem("startTime", startTime);
-
-    setInterval(function () {
-        let diff = Math.floor((Date.now() - startTime) / 1000);
-        let hrs = Math.floor(diff / 3600);
-        let mins = Math.floor((diff % 3600) / 60);
-        let secs = diff % 60;
-        document.getElementById('dateTime3').innerHTML = `${hrs}:${mins.toString().padStart(2,'0')}:${secs.toString().padStart(2,'0')}`;
-    }, 1000);
-
-    // Reset đồng hồ khi nhấn 5 lần nút Refresh
-    let reloadCount = 0;
-    document.getElementById('btn-refresh').onclick = function(e) {
+    // 5. Làm mới QR
+    document.getElementById('refresh-qr').onclick = function(e) {
         e.preventDefault();
-        makeQR();
-        reloadCount++;
-        if (reloadCount >= 5) {
-            startTime = Date.now();
-            localStorage.setItem("startTime", startTime);
-            reloadCount = 0;
-        }
+        updateQR();
     };
 </script>
+
 </body>
 </html>
