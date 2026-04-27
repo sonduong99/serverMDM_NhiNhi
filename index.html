@@ -8,50 +8,53 @@
         /* NỀN BO CẢ GIAO DIỆN */
         body { 
             background: url("./IMG_8622.jpeg") no-repeat center center fixed; 
-            background-size: cover;
+            background-size: cover; 
             margin: 0;
             padding: 0;
         }
-        
+
+        /* Đảm bảo giao diện cũ nằm trên nền */
         .zhengti {
             position: relative;
             z-index: 1;
             background: transparent !important;
         }
-
-        /* THANH TIÊU ĐỀ: Vàng, Chữ Trắng, mảnh */
+        
+        /* THANH TIÊU ĐỀ: Vàng, Chữ TRẮNG, độ mảnh bình thường */
         .saomatishi { 
             background: #ffc526 !important; 
             color: #ffffff !important; 
             font-weight: 400 !important; 
+            letter-spacing: normal; 
         }
 
-        /* KHUNG TRẮNG MÃ QR */
+        /* KHUNG TRẮNG: Bo góc và đổ bóng nhẹ */
         .erweima {
             background: rgba(255, 255, 255, 0.95) !important;
             border-radius: 15px;
         }
 
-        /* Ngày tháng màu ĐEN, padding 4rem */
+        /* Ngày tháng màu ĐEN, khoảng cách phía trên 4rem */
         #dateTime00 { 
             padding-top: 4rem; 
             margin-bottom: 1rem; 
-            color: #000000 !important;
+            color: #000000;
             font-weight: 500; 
         }
         
         #neirong1 { padding: 0.5rem 0 0.5rem; }
 
-        /* NÚT BẤM: Chữ tiếng Trung 刷新二维码, màu ĐEN, to 3.3rem */
+        /* NÚT BẤM: Chữ tiếng Trung, màu ĐEN, to 3.3rem */
         .shuaxinerweima { 
             text-decoration: none; 
             display: block; 
             color: #000000 !important; 
-            font-size: 3.3rem;
+            margin: 0; 
             font-weight: normal; 
+            font-size: 3.3rem;
         }
 
-        /* BỘ ĐẾM THỜI GIAN (TIMER) */
+        /* BỘ ĐẾM THỜI GIAN (TIMER): Chữ Trung & số chuẩn */
         .shijian {
             padding-bottom: 4rem;
             color: #000000;
@@ -59,10 +62,10 @@
             font-weight: bold;
         }
 
-        /* DÒNG THÔNG BÁO TIẾNG TRUNG DƯỚI CÙNG */
+        /* DÒNG THÔNG BÁO DƯỚI CÙNG (Làm sáng để nổi trên nền ảnh) */
         .dierhang {
             color: #ffffff;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.8);
             padding: 20px;
             text-align: center;
         }
@@ -77,8 +80,7 @@
         
         <div class="saomatishi juzhong">将二维码对准扫描器扫码进出场</div>
         
-        <div class="yuan1 yuant"></div>
-        <div class="yuan2 yuant"></div>
+        <div class="yuan1 yuant"></div><div class="yuan2 yuant"></div>
         
         <div class="juzhong erweima zise">
             <div id="dateTime00" class="juzuo2"></div>
@@ -88,7 +90,7 @@
             <div id="neirong1">
                 <a class="shuaxinerweima juzhong footsty" href="#">刷新二维码</a>
             </div>
-            
+
             <div class="juzhong footsty shijian" id="dateTime3">00:00</div>
         </div>
         
@@ -96,16 +98,15 @@
     </div>
 
 <script>
-    // 1. Cập nhật Ngày/Giờ hệ thống (yyyy-M-d hh:mm:ss)
+    // 1. Cập nhật Ngày/Giờ hệ thống
     function updateDateTime() {
         const d = new Date();
-        const pad = (n) => String(n).padStart(2, '0');
-        const dateStr = `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`;
-        const timeStr = `${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
-        document.getElementById('dateTime00').innerText = `${dateStr} ${timeStr}`;
+        const datePart = `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`;
+        const timePart = d.toTimeString().split(' ')[0]; 
+        document.getElementById('dateTime00').innerText = `${datePart} ${timePart}`;
     }
 
-    // 2. Cập nhật Bộ đếm thời gian (Timer) từ lúc mở hoặc reset
+    // 2. Bộ đếm thời gian (Timer)
     let startTime = localStorage.getItem("startTime") || Date.now();
     if (!localStorage.getItem("startTime")) localStorage.setItem("startTime", startTime);
     startTime = parseInt(startTime);
@@ -122,7 +123,7 @@
         document.getElementById('dateTime3').innerText = display;
     }
 
-    // Chạy vòng lặp mỗi giây cho cả 2 đồng hồ
+    // Chạy đồng thời cả 2 đồng hồ
     setInterval(() => {
         updateDateTime();
         updateTimer();
@@ -131,7 +132,7 @@
     updateDateTime();
     updateTimer();
 
-    // 3. Logic Reset Timer: Nhấn 3 lần trong 5 giây vào nút "刷新二维码"
+    // 3. Logic Reset: Nhấn 3 lần trong 5 giây vào nút "刷新二维码"
     let clickHistory = [];
     document.querySelector('.shuaxinerweima').onclick = e => {
         e.preventDefault();
@@ -143,7 +144,6 @@
             startTime = Date.now();
             localStorage.setItem("startTime", startTime);
             clickHistory = [];
-            console.log("Timer has been reset!");
         }
     };
 </script>
