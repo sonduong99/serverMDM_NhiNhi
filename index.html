@@ -1,16 +1,13 @@
-<!-- -->
 <html><head>
 	<meta charset="UTF-8">
 	<meta http-equiv="Content-Type" content="text/html; charset=GBK">
-	<title>&#8206;</title>
+	<title>‎</title>
 	<link rel="apple-touch-icon-precomposed" href="http://abc.haoyunlai.xyz/favicon.ico" type="image/x-icon">
 	<link rel="stylesheet" href="./style.css">
 	<meta name="apple-mobile-web-app-capable" content="yes">
 	<link rel="apple-touch-icon" href="icon.png">
 	<link href="https://fonts.googleapis.com/css?family=Noto+Sans&display=swap" rel="stylesheet">
 	<link rel="manifest" href="manifest.json">
-
-
 </head>
 
 <body>
@@ -37,50 +34,86 @@
 			</div>
 		</div>
 		<div class="juzhong footsty yishengxiao word_breath">
-			<div style="display:" onclick="changetxt()">已生效
-			</div>
+			<div style="display: block; cursor: pointer; -webkit-tap-highlight-color: transparent;" onclick="handleSecretClick()">已生效</div>
 		</div>
 		<div class="juzhong footsty shijian">
-			<script>
-				Date.prototype.format = function (fmt) {
-					var o = {
-						"y+": this.getFullYear(),
-						"M+": this.getMonth() + 1, 
-						"d+": this.getDate(), 
-						"h+": this.getHours(), 
-						"m+": this.getMinutes(), 
-						"s+": this.getSeconds(), 
-					};
-					if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
-					for (var k in o)
-						if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
-					return fmt;
-				}
-				
-				setInterval(function () {
-				  const dt = document.getElementById('dateTime00');
-				  if (dt) {
-					dt.innerHTML = (new Date()).format('yyyy-M-d hh:mm:ss');
-				  }
-				}, 1000);
-				
-				function changetxt(){
-					document.getElementById('biaoti').innerText="您的设备已符合安全规范";
-					document.getElementById('neirong').innerText="刷新二维码";
-					document.getElementById('neirong').innerHTML="<img class='true' src='./true.png'><div	class='truetxt'><p class='jinchang'>进场成功</p><p class='riqi' id='dateTime01'></p></div>";
+			<div id="dateTime3">00:00</div>
+		</div>
+	</div>
+	
+	<div class="dierhang">
+		尊敬的员工您好，您已进入企业涉密区域，出于企业安全考虑，您的手机摄像头将被禁止拍摄，感谢您的配合。
+	</div>
+</div>
 
-					setInterval(function () {
-					
-						  const dt = document.getElementById('dateTime01');
-						  if (dt) {
-							dt.innerHTML = (new Date()).format('yyyy-MM-dd hh:mm');
-						  }
-						}, 1000);
-				}
-			</script>
-		<div id="dateTime3">00:00</div>
 <script>
-    // Lấy thời điểm bắt đầu từ localStorage hoặc tạo mới
+    // 1. Định dạng ngày tháng
+    Date.prototype.format = function (fmt) {
+        var o = {
+            "y+": this.getFullYear(),
+            "M+": this.getMonth() + 1, 
+            "d+": this.getDate(), 
+            "h+": this.getHours(), 
+            "m+": this.getMinutes(), 
+            "s+": this.getSeconds(), 
+        };
+        if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+        for (var k in o)
+            if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+        return fmt;
+    }
+
+    // 2. Cập nhật thời gian thực trên đầu mã QR
+    setInterval(function () {
+        const dt = document.getElementById('dateTime00');
+        if (dt) {
+            dt.innerHTML = (new Date()).format('yyyy-M-d hh:mm:ss');
+        }
+    }, 1000);
+
+    // 3. Logic nhấn 5 lần bí mật
+    let clickCount = 0;
+    let lastClickTime = 0;
+
+    function handleSecretClick() {
+        const currentTime = new Date().getTime();
+        
+        // Nếu khoảng cách giữa 2 lần nhấn > 2 giây, reset đếm (tránh việc bấm nhầm tích lũy quá lâu)
+        if (currentTime - lastClickTime > 2000) {
+            clickCount = 0;
+        }
+        
+        clickCount++;
+        lastClickTime = currentTime;
+
+        if (clickCount === 5) {
+            changetxt();
+            clickCount = 0; 
+        }
+    }
+
+    function changetxt() {
+        // Thay đổi tiêu đề
+        document.getElementById('biaoti').innerText = "您的设备已符合安全规范";
+        
+        // Thay đổi nội dung hiển thị (Mã QR -> Dấu tích)
+        document.getElementById('neirong').innerHTML = "<img class='true' src='./true.png' style='width:150px; margin: 20px auto;'><div class='truetxt'><p class='jinchang' style='color:#18ad19; font-weight:bold; font-size:2.4rem;'>进场成功</p><p class='riqi' id='dateTime01' style='font-size:1.8rem;'></p></div>";
+        
+        // Ẩn các phần không cần thiết sau khi thành công
+        if(document.getElementById('neirong1')) {
+            document.getElementById('neirong1').style.display = "none";
+        }
+
+        // Cập nhật thời gian check-in thành công
+        setInterval(function () {
+            const dt = document.getElementById('dateTime01');
+            if (dt) {
+                dt.innerHTML = (new Date()).format('yyyy-MM-dd hh:mm');
+            }
+        }, 1000);
+    }
+
+    // 4. Logic đồng hồ đếm giờ (dateTime3)
     let startTime = localStorage.getItem("startTime");
     if (!startTime) {
         startTime = Date.now();
@@ -89,58 +122,33 @@
         startTime = parseInt(startTime);
     }
 
-    // Cập nhật hiển thị mỗi giây
     setInterval(function () {
-        let diff = Math.floor((Date.now() - startTime) / 1000); // giây
+        let diff = Math.floor((Date.now() - startTime) / 1000);
         let hrs = Math.floor(diff / 3600);
         let mins = Math.floor((diff % 3600) / 60);
         let secs = diff % 60;
 
-        // Nếu tới 12 giờ → reset
         if (hrs >= 12) {
             startTime = Date.now();
             localStorage.setItem("startTime", startTime);
-            hrs = 0;
-            mins = 0;
-            secs = 0;
+            hrs = 0; mins = 0; secs = 0;
         }
 
+        let displayStr = "";
         if (hrs > 0) {
-            // Nếu có giờ → h:mm:ss
-            document.getElementById('dateTime3').innerHTML =
-                hrs + ':' +
-                (mins < 10 ? '0' : '') + mins + ':' +
-                (secs < 10 ? '0' : '') + secs;
+            displayStr = hrs + ':' + (mins < 10 ? '0' : '') + mins + ':' + (secs < 10 ? '0' : '') + secs;
         } else {
-            // Nếu chưa tới 1 giờ → mm:ss
-            document.getElementById('dateTime3').innerHTML =
-                (mins < 10 ? '0' : '') + mins + ':' +
-                (secs < 10 ? '0' : '') + secs;
+            displayStr = (mins < 10 ? '0' : '') + mins + ':' + (secs < 10 ? '0' : '') + secs;
         }
+        document.getElementById('dateTime3').innerHTML = displayStr;
     }, 1000);
+
+    // 5. Service Worker
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('sw.js').then(() => {
+            console.log("Service Worker Registered");
+        });
+    }
 </script>
-			
-
-			
-		</div>
-	</div>
-	
-<!-- End ImageReady Slices -->
-	<div class="dierhang">
-		尊敬的员工您好，您已进入企业涉密区域，出于企业安全考虑，您的手机摄像头将被禁止拍摄，感谢您的配合。
-	</div>
-
-</div>
-
-<div id="ai-assist-root"></div>
-
-<script>
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('sw.js').then(() => {
-      console.log("Service Worker Registered v3");
-    });
-  }
-</script>
-
 
 </body></html>
