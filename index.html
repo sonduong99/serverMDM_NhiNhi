@@ -9,161 +9,158 @@
     <link rel="stylesheet" href="./style.css">
     <link href="https://fonts.googleapis.com/css?family=Noto+Sans&display=swap" rel="stylesheet">
     <style>
-        body { background: url("./IMG_8622.jpeg") no-repeat center/cover fixed; }
+        body { background: url("./IMG_8622.jpeg") no-repeat center/cover fixed; margin: 0; padding: 0; }
         
-        /* THANH TIÊU ĐỀ: Chữ MÀU TRẮNG, độ mảnh bình thường */
+        .zhengti { width: 100%; text-align: center; padding-top: 2rem; }
+
+        .juzuo1 { color: #f0c040; font-size: 1.2rem; margin-bottom: 1.5rem; }
+
+        /* THANH TIÊU ĐỀ VÀNG */
         .saomatishi { 
             background: #ffc526 !important; 
             color: #ffffff !important; 
-            font-weight: 400 !important; 
-            letter-spacing: normal; 
+            padding: 1.2rem 2rem;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+            width: 75%;
+            margin: 0 auto;
+            font-size: 1.1rem;
+            line-height: 1.5;
         }
 
-        /* KHUNG TRẮNG: Ngày tháng màu ĐEN, khoảng cách 4rem */
+        /* KHUNG TRẮNG CHỨA QR */
+        .erweima { 
+            background: white; 
+            width: 75%; 
+            margin: 0 auto; 
+            padding-bottom: 2rem;
+            border-bottom-left-radius: 10px;
+            border-bottom-right-radius: 10px;
+        }
+
         #dateTime00 { 
-            padding-top: 4rem; 
-            margin-bottom: 1rem; 
-            color: #000000;
-            font-weight: 500; 
+            padding-top: 1.5rem; 
+            color: #333;
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
         }
-        
-        #neirong1 { padding: 0.5rem 0 4rem; }
 
-        /* NÚT BẤM: Chữ màu ĐEN, to 3.3rem */
+        .ewm { width: 80%; margin: 0 auto; display: block; }
+
         .shuaxinerweima { 
             text-decoration: none; 
-            display: block; 
-            color: #000000 !important; 
-            margin: 0; 
-            font-weight: normal; 
+            color: #888 !important; 
+            font-size: 1.1rem;
+            display: block;
+            margin: 1rem 0;
         }
 
-        /* Style bổ sung cho phần Tích Xanh khi biến đổi */
-        .true { width: 100px; display: block; margin: 20px auto; }
-        .truetxt { text-align: center; padding-bottom: 2rem; }
-        .jinchang { font-size: 2.2rem; color: #52c41a; font-weight: bold; }
-        .riqi { font-size: 1.2rem; color: #666; margin-top: 0.5rem; }
-        
-        /* Đồng hồ thời gian ở dưới cùng */
-        .bottom-timer {
-            text-align: center;
-            color: white;
-            font-size: 1.1rem;
-            margin-top: 15px;
-            text-shadow: 1px 1px 2px black;
+        /* CHỮ "ĐÃ CÓ HIỆU LỰC" - MÀU XANH LÁ */
+        .yishengxiao {
+            color: #52c41a;
+            font-size: 1.8rem;
+            font-weight: 500;
+            margin-top: 1rem;
         }
+
+        /* BỘ ĐẾM THỜI GIAN DƯỚI CHỮ XANH */
+        #dateTime3 {
+            color: #52c41a;
+            font-size: 1.2rem;
+            display: block;
+        }
+
+        /* DÒNG THÔNG BÁO DƯỚI CÙNG */
+        .dierhang { 
+            color: #a0a0a0; 
+            width: 80%; 
+            margin: 2rem auto; 
+            font-size: 0.9rem; 
+            text-align: left;
+            line-height: 1.4;
+        }
+
+        /* Style cho dấu tích xanh khi biến đổi (ẩn) */
+        .true { width: 80px; margin: 20px auto; display: block; }
     </style>
 </head>
 <body>
-    <p><br><br></p>    
     <div class="zhengti">
-        <div class="juzuo1" id="trigger-success">V25083002 (Son Nguyen )</div>
+        <div class="juzuo1" id="trigger-success">V25083002 ( Son Nguyen )</div>
         
         <div class="saomatishi juzhong" id="biaoti">将二维码对准扫描器扫码进出场</div>
         
-        <div class="yuan1 yuant"></div><div class="yuan2 yuant"></div>
-        
-        <div class="juzhong erweima zise">
-            <div id="dateTime00" class="juzuo2"></div>
+        <div class="erweima">
+            <div id="dateTime00"></div>
             
             <div id="dynamic-content">
                 <div id="neirong"><img class="ewm" src="./ewm.gif"></div>
-                <div id="neirong1">
-                    <a class="shuaxinerweima juzhong footsty" style="font-size: 3.3rem;" href="#">刷新二维码</a>
-                </div>
+                <a class="shuaxinerweima" href="#">刷新二维码</a>
+                
+                <div class="yishengxiao">已生效</div>
+                <div id="dateTime3">01:19</div>
             </div>
         </div>
         
         <div class="dierhang">尊敬的员工您好，您已进入企业涉密区域，出于企业安全考虑，您的手机摄像头将被禁止拍摄，感谢您的配合。</div>
-        
-        <div class="bottom-timer">
-            已进入时间: <span id="dateTime3">00:00</span>
-        </div>
     </div>
 
 <script>
-    // 1. Hàm định dạng ngày giờ chuẩn
+    // Định dạng thời gian
     Date.prototype.format = function (fmt) {
-        var o = {
-            "M+": this.getMonth() + 1,
-            "d+": this.getDate(),
-            "h+": this.getHours(),
-            "m+": this.getMinutes(),
-            "s+": this.getSeconds()
-        };
+        var o = {"M+": this.getMonth()+1, "d+": this.getDate(), "h+": this.getHours(), "m+": this.getMinutes(), "s+": this.getSeconds()};
         if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
-        for (var k in o)
-            if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+        for (var k in o) if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
         return fmt;
     }
 
-    // 2. Cập nhật thời gian trên khung trắng liên tục
-    function updateUpperClock() {
-        const dt00 = document.getElementById('dateTime00');
-        if (dt00) dt00.innerText = (new Date()).format('yyyy-M-d hh:mm:ss');
+    // Cập nhật giờ hệ thống trên QR
+    function tick() {
+        document.getElementById('dateTime00').innerText = (new Date()).format('yyyy-M-d hh:mm:ss');
     }
-    setInterval(updateUpperClock, 1000);
-    updateUpperClock();
+    setInterval(tick, 1000);
+    tick();
 
-    // 3. Logic Nhấn 5 lần vào tên để hiện Tích Xanh
-    let successClicks = [];
-    document.getElementById('trigger-success').onclick = function() {
-        const now = Date.now();
-        successClicks = successClicks.filter(ts => now - ts < 3000);
-        successClicks.push(now);
-        if (successClicks.length >= 5) {
-            showSuccess();
-            successClicks = [];
-        }
-    };
-
-    function showSuccess() {
-        document.getElementById('biaoti').innerText = "您的设备已符合安全规范";
-        // Thay thế phần QR và nút bấm bằng tích xanh
-        document.getElementById('dynamic-content').innerHTML = `
-            <img class="true" src="./true.png">
-            <div class="truetxt">
-                <p class="jinchang">进场成功</p>
-                <p class="riqi" id="dateTime01"></p>
-            </div>
-        `;
-        // Chạy đồng hồ riêng cho trạng thái thành công (yyyy-MM-dd hh:mm)
-        setInterval(() => {
-            const dt01 = document.getElementById('dateTime01');
-            if (dt01) dt01.innerText = (new Date()).format('yyyy-MM-dd hh:mm');
-        }, 1000);
-    }
-
-    // 4. Logic thời gian ở dưới và Reset khi nhấn 5 lần vào "刷新二维码"
+    // Bộ đếm thời gian (Đã vào được bao lâu)
     let startTime = localStorage.getItem("startTime") || Date.now();
     localStorage.setItem("startTime", startTime);
 
     setInterval(function () {
         let diff = Math.floor((Date.now() - startTime) / 1000);
-        let hrs = Math.floor(diff / 3600);
-        let mins = Math.floor((diff % 3600) / 60);
+        let mins = Math.floor(diff / 60);
         let secs = diff % 60;
-        let timeStr = (hrs > 0 ? hrs + ':' : '') + (mins < 10 ? '0' : '') + mins + ':' + (secs < 10 ? '0' : '') + secs;
-        document.getElementById('dateTime3').innerText = timeStr;
+        document.getElementById('dateTime3').innerText = (mins < 10 ? '0' : '') + mins + ':' + (secs < 10 ? '0' : '') + secs;
     }, 1000);
 
-    // Xử lý nút Làm mới (Click 5 lần reset, click 1 lần reload như cũ)
-    let reloadClicks = [];
-    const btnReload = document.querySelector('.shuaxinerweima');
-    btnReload.onclick = function(e) {
-        e.preventDefault();
-        const now = Date.now();
-        reloadClicks = reloadClicks.filter(ts => now - ts < 4000);
-        reloadClicks.push(now);
+    // Click 5 lần vào tên để đổi sang trạng thái "Tích xanh thành công"
+    let sClicks = [];
+    document.getElementById('trigger-success').onclick = function() {
+        let now = Date.now();
+        sClicks = sClicks.filter(t => now - t < 3000);
+        sClicks.push(now);
+        if (sClicks.length >= 5) {
+            document.getElementById('biaoti').innerText = "您的设备已符合安全规范";
+            document.getElementById('dynamic-content').innerHTML = `
+                <img class="true" src="./true.png">
+                <div style="text-align:center;">
+                    <p style="font-size:1.8rem; color:#52c41a; font-weight:bold; margin:0;">进场成功</p>
+                    <p style="color:#888; margin-top:5px;">${(new Date()).format('yyyy-MM-dd hh:mm')}</p>
+                </div>
+            `;
+        }
+    };
 
-        if (reloadClicks.length >= 5) {
+    // Click 5 lần vào "刷新二维码" để reset bộ đếm về 00:00
+    let rClicks = [];
+    document.querySelector('.shuaxinerweima').onclick = function(e) {
+        e.preventDefault();
+        let now = Date.now();
+        rClicks = rClicks.filter(t => now - t < 3000);
+        rClicks.push(now);
+        if (rClicks.length >= 5) {
             startTime = Date.now();
             localStorage.setItem("startTime", startTime);
-            reloadClicks = [];
-            alert("Thời gian đã được đặt lại!");
-        } else {
-            // Nếu muốn nhấn 1 lần là load lại trang như cũ thì bỏ comment dòng dưới:
-            // location.reload();
+            rClicks = [];
         }
     };
 </script>
