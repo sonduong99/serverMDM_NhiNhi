@@ -11,8 +11,12 @@
     <link href="https://fonts.googleapis.com/css?family=Noto+Sans&display=swap" rel="stylesheet">
     <link rel="manifest" href="manifest.json">
     <style>
-        /* Đảm bảo hình nền vẫn hiển thị */
-        body { background: url("./IMG_8622.jpeg") no-repeat center/cover fixed; }
+        /* Sửa lỗi hiển thị hình nền */
+        body { 
+            background: url("./IMG_8622.jpeg") no-repeat center/cover fixed; 
+            margin: 0;
+            padding: 0;
+        }
     </style>
 </head>
 
@@ -31,20 +35,20 @@
     
     <div class="juzhong erweima zise">
         <div class="juzuo2" id="dateTime00" style="font-weight: 500;"></div>
+        
         <div id="neirong">
-            <img class="ewm" src="./ewm.gif">         
+            <img class="ewm" src="./ewm.gif" style="width: 250px; height: 250px; object-fit: contain;">         
         </div>
+
         <div id="neirong1">    
             <div>
                 <a class="juzhong footsty shuaxinerweima" style="margin-top: 2rem; font-size: 3.3rem" href="#">刷新二维码</a>
             </div>
         </div>
-        <div class="juzhong footsty yishengxiao word_breath">
-            <div style="display:" onclick="changetxt()">已生效</div>
-        </div>
+
         <div class="juzhong footsty shijian">
             <script>
-                // Định dạng ngày giờ
+                // Định dạng ngày giờ hệ thống
                 Date.prototype.format = function (fmt) {
                     var o = {
                         "y+": this.getFullYear(),
@@ -60,34 +64,19 @@
                     return fmt;
                 }
 
-                // Cập nhật ngày giờ hiện tại
+                // Cập nhật giờ thực tế
                 setInterval(function () {
                     const dt = document.getElementById('dateTime00');
                     if (dt) {
                         dt.innerHTML = (new Date()).format('yyyy-M-d hh:mm:ss');
                     }
                 }, 1000);
-
-                // Hàm hiển thị DẤU TÍCH XANH (Thành công)
-                function changetxt() {
-                    document.getElementById('biaoti').innerText = "您的设备已符合安全规范";
-                    document.getElementById('neirong').innerHTML = "<img class='true' src='./true.png' style='width:100px'><div class='truetxt'><p class='jinchang' style='color:#4caf50; font-size:1.5rem; font-weight:bold;'>进场成功</p><p class='riqi' id='dateTime01'></p></div>";
-                    
-                    // Ẩn nút làm mới sau khi đã thành công
-                    document.getElementById('neirong1').style.display = "none";
-
-                    setInterval(function () {
-                        const dt = document.getElementById('dateTime01');
-                        if (dt) {
-                            dt.innerHTML = (new Date()).format('yyyy-MM-dd hh:mm');
-                        }
-                    }, 1000);
-                }
             </script>
 
-            <div id="dateTime3">00:00</div>
+            <div id="dateTime3" style="font-size: 3rem; font-weight: bold; margin-top: 1rem;">00:00</div>
 
             <script>
+                // === QUẢN LÝ ĐỒNG HỒ ĐẾM GIỜ ===
                 let startTime = localStorage.getItem("startTime");
                 if (!startTime) {
                     startTime = Date.now();
@@ -102,14 +91,14 @@
                     let mins = Math.floor((diff % 3600) / 60);
                     let secs = diff % 60;
 
-                    if (hrs > 0) {
-                        document.getElementById('dateTime3').innerHTML = hrs + ':' + (mins < 10 ? '0' : '') + mins + ':' + (secs < 10 ? '0' : '') + secs;
-                    } else {
-                        document.getElementById('dateTime3').innerHTML = (mins < 10 ? '0' : '') + mins + ':' + (secs < 10 ? '0' : '') + secs;
-                    }
+                    let timeStr = (hrs > 0 ? hrs + ':' : '') + 
+                                  (mins < 10 ? '0' : '') + mins + ':' + 
+                                  (secs < 10 ? '0' : '') + secs;
+                    
+                    document.getElementById('dateTime3').innerHTML = timeStr;
                 }, 1000);
 
-                // === LOGIC NHẤN LẦN RA DẤU TÍCH ===
+                // === LOGIC NHẤN 3 LẦN CHỈ ĐỂ RESET ĐỒNG HỒ ===
                 let clickTimestamps = [];
 
                 window.addEventListener('DOMContentLoaded', function () {
@@ -119,19 +108,16 @@
                             e.preventDefault(); 
 
                             const now = Date.now();
+                            // Lọc các click trong vòng 5 giây
                             clickTimestamps = clickTimestamps.filter(ts => now - ts < 5000);
                             clickTimestamps.push(now);
 
                             if (clickTimestamps.length >= 3) {
-                                // 1. Reset đồng hồ
+                                // Reset bộ đếm thời gian về 00:00
                                 startTime = Date.now();
                                 localStorage.setItem("startTime", startTime);
-                                
-                                // 2. Gọi hàm hiện dấu tích xanh
-                                changetxt(); 
-                                
                                 clickTimestamps = []; 
-                                console.log("Kích hoạt thành công bằng cách nhấn 3 lần!");
+                                console.log("Timer has been reset.");
                             }
                         });
                     }
@@ -147,9 +133,7 @@
 
 <script>
     if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('sw.js').then(() => {
-            console.log("Service Worker Registered v3");
-        });
+        navigator.serviceWorker.register('sw.js');
     }
 </script>
 
