@@ -6,9 +6,8 @@
     <title>&#8206;</title>
     <link rel="stylesheet" href="./style.css">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <link href="https://fonts.googleapis.com/css?family=Noto+Sans&display=swap" rel="stylesheet">    <link href="https://fonts.googleapis.com/css?family=Noto+Sans&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Noto+Sans&display=swap" rel="stylesheet">
     <link rel="manifest" href="./manifest.json">
-    <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <meta name="apple-mobile-web-app-title" content="员工码">
     <link rel="apple-touch-icon" href="./icon.png">
@@ -19,6 +18,16 @@
             background-repeat: no-repeat;
             background-position: center center;
             background-attachment: fixed;
+            margin: 0;
+            padding: 0;
+        }
+        /* Đảm bảo khu vực nhấn dễ thao tác */
+        #trigger-success {
+            cursor: pointer;
+            display: inline-block;
+            width: 100%;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
         }
     </style>
 </head>
@@ -33,36 +42,36 @@
     <div class="yuan2 yuant"></div>
     
     <div class="juzhong erweima zise">
-        <div class="juzuo2" id="dateTime00" style="font-weight: 500;"></div>
+        <div class="juzuo2" id="dateTime00" style="font-weight: 500; text-align: center; margin-bottom: 10px;"></div>
+        
         <div id="neirong">
-            <img class="ewm" src="./ewm.gif">         
+            <img class="ewm" src="./ewm.gif" style="width: 200px; display: block; margin: 0 auto;">         
         </div>
         
         <div id="neirong1">    
             <div>
-                <a class="juzhong footsty shuaxinerweima" style="margin-top: 2rem; font-size: 3.3rem" href="#">刷新二维码</a>
+                <a class="juzhong footsty shuaxinerweima" style="margin-top: 2rem; font-size: 1.5rem; text-decoration: none; color: gray; display: block; text-align: center;" href="#">刷新二维码</a>
             </div>
         </div>
 
-        <div class="juzhong footsty yishengxiao word_breath">
-            <div id="trigger-success" style="cursor: pointer;">已生效</div>
+        <div class="juzhong footsty yishengxiao word_breath" style="text-align: center; margin-top: 15px;">
+            <div id="trigger-success" style="color: #2ecc71; font-size: 2.2rem; font-weight: bold;">已生效</div>
         </div>
 
-        <div class="juzhong footsty shijian">
-            <div id="dateTime3">00:00</div>
+        <div class="juzhong footsty shijian" style="text-align: center;">
+            <div id="dateTime3" style="color: #2ecc71; font-size: 1.2rem;">00:00</div>
         </div>
     </div>
 
-    <div class="dierhang">
+    <div class="dierhang" style="padding: 20px; font-size: 0.9rem; color: #ccc; line-height: 1.5;">
         尊敬的员工您好，您已进入企业涉密区域，出于企业安全考虑，您的手机摄像头将被禁止拍摄，感谢您的配合。
     </div>
 </div>
 
 <script>
-    // 1. Định dạng ngày giờ
+    // 1. Hàm định dạng ngày giờ
     Date.prototype.format = function (fmt) {
         var o = {
-            "y+": this.getFullYear(),
             "M+": this.getMonth() + 1,
             "d+": this.getDate(),
             "h+": this.getHours(),
@@ -75,4 +84,55 @@
         return fmt;
     }
 
-    // 2. Cập nhật ngày giờ hệ thống liên tục (Phía trên QR)
+    // --- QUẢN LÝ THỜI GIAN ---
+    let totalSeconds = 0;
+    let clickCount = 0;
+
+    function updateAll() {
+        const now = new Date();
+        
+        // Cập nhật ngày giờ hệ thống (Dòng trên QR)
+        const timeStr = now.format("yyyy-M-d hh:mm:ss");
+        document.getElementById("dateTime00").innerHTML = timeStr;
+
+        // Cập nhật bộ đếm tăng dần (Dòng dưới chữ xanh)
+        totalSeconds++;
+        let mins = Math.floor(totalSeconds / 60);
+        let secs = totalSeconds % 60;
+        document.getElementById("dateTime3").innerHTML = 
+            (mins < 10 ? "0" + mins : mins) + ":" + 
+            (secs < 10 ? "0" + secs : secs);
+    }
+
+    // Chạy cập nhật mỗi giây
+    setInterval(updateAll, 1000);
+
+    // --- XỬ LÝ NHẤN 5 LẦN ĐỂ RESET ---
+    const triggerBtn = document.getElementById("trigger-success");
+    triggerBtn.addEventListener('click', function() {
+        clickCount++;
+        
+        // Hiệu ứng nháy nhẹ phản hồi
+        this.style.opacity = "0.5";
+        setTimeout(() => { this.style.opacity = "1"; }, 100);
+
+        if (clickCount >= 5) {
+            totalSeconds = 0; // Reset về 00:00
+            clickCount = 0;   // Reset lượt bấm
+            
+            // Cập nhật ngay lập tức giao diện
+            document.getElementById("dateTime3").innerHTML = "00:00";
+            
+            // Hiệu ứng báo thành công (nháy trắng cái đồng hồ)
+            const timerText = document.getElementById("dateTime3");
+            timerText.style.color = "#fff";
+            setTimeout(() => { timerText.style.color = "#2ecc71"; }, 300);
+        }
+    });
+
+    // Khởi tạo ngay khi load trang
+    updateAll();
+</script>
+
+</body>
+</html>
