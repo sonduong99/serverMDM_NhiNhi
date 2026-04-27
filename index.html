@@ -6,7 +6,12 @@
     <title>&#8206;</title>
     <link rel="stylesheet" href="./style.css">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <link href="https://fonts.googleapis.com/css?family=Noto+Sans&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Noto+Sans&display=swap" rel="stylesheet">    <link href="https://fonts.googleapis.com/css?family=Noto+Sans&display=swap" rel="stylesheet">
+    <link rel="manifest" href="./manifest.json">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="员工码">
+    <link rel="apple-touch-icon" href="./icon.png">
     <style>
         body {
             background-image: url("./IMG_8622.jpeg");
@@ -21,7 +26,7 @@
 <body>
 <p><br><br></p>    
 <div class="zhengti">
-    <div class="juzuo1">V25051817 (Pham Son Duong)</div>
+    <div class="juzuo1">V25083002 (Son Nguyen)</div>
     <div class="saomatishi juzhong" id="biaoti">将二维码对准扫描器扫码进出场</div>
     
     <div class="yuan1 yuant"></div>
@@ -71,12 +76,3 @@
     }
 
     // 2. Cập nhật ngày giờ hệ thống liên tục (Phía trên QR)
-    setInterval(function () {
-        const dt = document.getElementById('dateTime00');
-        if (dt) dt.innerHTML = (new Date()).format('yyyy-M-d hh:mm:ss');
-    }, 1000);
-
-    // 3. LOGIC NHẤN 5 LẦN VÀO "ĐÃ CÓ HIỆU LỰC" ĐỂ HIỆN DẤU TÍCH XANH
-    let successClicks = [];
-    document.getElementById('trigger-success').addEventListener('click', function() {
-        const now = Date.now();
