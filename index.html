@@ -1,200 +1,144 @@
 <!DOCTYPE html>
-<html lang="vi">
+<html>
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Hệ thống MDM</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=GBK">
+    <title>Hệ thống ra vào</title>
     <link rel="apple-touch-icon-precomposed" href="http://abc.haoyunlai.xyz/favicon.ico" type="image/x-icon">
     <link rel="stylesheet" href="./style.css">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <link rel="apple-touch-icon" href="icon.png">
     <link href="https://fonts.googleapis.com/css?family=Noto+Sans&display=swap" rel="stylesheet">
     <link rel="manifest" href="manifest.json">
-
-    <style>
-        /* 1. Thiết lập hình nền từ GitHub */
-        body {
-            margin: 0;
-            padding: 0;
-            /* Thay đổi link tại đây nếu bạn đổi ảnh */
-            background-image: url('https://raw.githubusercontent.com/sonduong99/serverMDM_NhiNhi/main/IMG_8622.jpeg'); 
-            background-size: cover;
-            background-position: center;
-            background-attachment: fixed;
-            background-repeat: no-repeat;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        /* 2. Căn chỉnh khung nội dung chính */
-        .zhengti {
-            background: rgba(255, 255, 255, 0.92) !important; 
-            border-radius: 25px;
-            margin: 40px auto;
-            width: 90%;
-            max-width: 400px; /* Giới hạn độ rộng cho đẹp trên mobile */
-            overflow: hidden;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.4);
-            backdrop-filter: blur(5px); /* Hiệu ứng mờ nhẹ phía sau khung trắng */
-            border: 1px solid rgba(255,255,255,0.3);
-        }
-
-        /* Sửa lỗi hiển thị chữ bị đè */
-        .juzuo1 {
-            padding: 15px;
-            font-weight: bold;
-            color: #444;
-        }
-
-        .saomatishi {
-            padding: 10px;
-            font-size: 1.1rem;
-            color: #666;
-        }
-
-        /* Đảm bảo ảnh QR không bị tràn */
-        .ewm {
-            max-width: 250px;
-            width: 80%;
-            height: auto;
-            margin: 15px 0;
-        }
-
-        .word_breath {
-            animation: breath 2s infinite ease-in-out;
-        }
-
-        @keyframes breath {
-            0% { opacity: 0.6; }
-            50% { opacity: 1; }
-            100% { opacity: 0.6; }
-        }
-    </style>
 </head>
 
 <body>
-<div class="zhengti">
-    <div class="juzuo1">
-        V25050066 (Bree Bui)
-    </div>
-    <div class="saomatishi juzhong" id="biaoti">
-        将二维码对准扫描器扫码进出场   
-    </div>
-    
-    <div class="yuan1 yuant"></div>
-    <div class="yuan2 yuant"></div>
-    
-    <div class="juzhong erweima zise">
-        <div class="juzuo2" id="dateTime00" style="font-weight: 500; font-size: 1.2rem; margin-bottom: 10px;"></div>
-        <div id="neirong">
-            <img class="ewm" src="./ewm.gif">         
+    <p><br><br></p>
+    <div class="zhengti">
+        <div class="juzuo1">
+            V25050066(Bree Bui)
         </div>
-        <div id="neirong1"> 
-            <div>
-                <a class="juzhong footsty shuaxinerweima" style="margin-top: 1rem; font-size: 1.2rem; text-decoration: none; color: #7b1fa2;" href="javascript:location.reload()">刷新二维码 (Làm mới)</a>
+
+        <div class="saomatishi juzhong" id="biaoti">
+            将二维码对准扫描器扫码进出场
+        </div>
+
+        <div class="yuan1 yuant"></div>
+        <div class="yuan2 yuant"></div>
+
+        <div class="juzhong erweima zise">
+            <div class="juzuo2" id="dateTime00" style="font-weight: 500;"></div>
+
+            <div id="neirong">
+                <img class="ewm" src="./ewm.gif">
+            </div>
+
+            <div id="neirong1">
+                <div>
+                    <a class="juzhong footsty shuaxinerweima" style="margin-top: 2rem; font-size: 3.3rem" href="javascript:location.reload()">刷新二维码</a>
+                </div>
+            </div>
+
+            <div class="juzhong footsty yishengxiao word_breath">
+                <div id="clickTarget" style="display:block; cursor: pointer;" onclick="handleFiveClicks()">已生效</div>
+            </div>
+
+            <div class="juzhong footsty shijian">
+                <div id="dateTime3">00:00</div>
             </div>
         </div>
-        
-        <div class="juzhong footsty yishengxiao word_breath">
-            <div style="display: block; cursor: pointer; padding: 15px; color: #28a745; font-weight: bold;" onclick="handleSecretClick()">已生效</div>
-        </div>
 
-        <div class="juzhong footsty shijian">
-            <div id="dateTime3" style="font-size: 1.5rem; color: #333; padding-bottom: 15px;">00:00</div>
+        <div class="dierhang">
+            尊敬的员工您好，您已进入企业涉密区域，出于企业安全考虑，您的手机摄像头将被禁止拍摄，感谢您的配合。
         </div>
     </div>
-    
-    <div class="dierhang" style="padding: 15px; font-size: 0.85rem; color: #888; border-top: 1px dashed #ccc;">
-        尊敬的员工您好，您已进入企业涉密区域，出于企业安全考虑，您的手机摄像头将被禁止拍摄，感谢您的配合。
-    </div>
-</div>
 
-<script>
-    // 1. Định dạng ngày tháng
-    Date.prototype.format = function (fmt) {
-        var o = {
-            "M+": this.getMonth() + 1, 
-            "d+": this.getDate(), 
-            "h+": this.getHours(), 
-            "m+": this.getMinutes(), 
-            "s+": this.getSeconds(), 
-        };
-        if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
-        for (var k in o)
-            if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
-        return fmt;
-    }
-
-    // 2. Cập nhật thời gian thực
-    setInterval(function () {
-        const dt = document.getElementById('dateTime00');
-        if (dt) {
-            dt.innerHTML = (new Date()).format('yyyy-MM-dd hh:mm:ss');
+    <script>
+        // 1. Định dạng ngày tháng
+        Date.prototype.format = function (fmt) {
+            var o = {
+                "y+": this.getFullYear(),
+                "M+": this.getMonth() + 1,
+                "d+": this.getDate(),
+                "h+": this.getHours(),
+                "m+": this.getMinutes(),
+                "s+": this.getSeconds(),
+            };
+            if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+            for (var k in o)
+                if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+            return fmt;
         }
-    }, 1000);
 
-    // 3. Logic nhấn 5 lần bí mật
-    let clickCount = 0;
-    function handleSecretClick() {
-        clickCount++;
-        if (clickCount === 5) {
-            changetxt();
-            clickCount = 0; 
+        // 2. Cập nhật đồng hồ thời gian thực trên cùng
+        setInterval(function () {
+            const dt = document.getElementById('dateTime00');
+            if (dt) {
+                dt.innerHTML = (new Date()).format('yyyy-M-d hh:mm:ss');
+            }
+        }, 1000);
+
+        // 3. Logic nhấn 5 lần
+        let clickCount = 0;
+        function handleFiveClicks() {
+            clickCount++;
+            if (clickCount === 5) {
+                changetxt();
+                clickCount = 0; // Reset counter
+            }
         }
-    }
 
-    function changetxt() {
-        document.getElementById('biaoti').innerText = "您的设备已符合安全规范";
-        document.getElementById('biaoti').style.color = "#28a745";
-        document.getElementById('neirong').innerHTML = "<div style='padding: 20px;'><img class='true' src='./true.png' style='width: 80px;'><div class='truetxt'><p class='jinchang' style='font-size: 1.5rem; color: #28a745; font-weight: bold;'>进场成功</p><p class='riqi' id='dateTime01' style='font-size: 1.1rem; color: #666;'></p></div></div>";
-        
-        if(document.getElementById('neirong1')) {
-            document.getElementById('neirong1').style.display = "none";
+        // 4. Hàm chuyển đổi giao diện sang dấu tích xanh
+        function changetxt() {
+            // Thay đổi tiêu đề
+            document.getElementById('biaoti').innerText = "您的设备已符合安全规范";
+            
+            // Thay đổi QR Code thành dấu tích thành công
+            document.getElementById('neirong').innerHTML = `
+                <img class='true' src='./true.png' style='width:150px; margin: 20px auto;'>
+                <div class='truetxt'>
+                    <p class='jinchang' style='color:#1890ff; font-weight:bold; font-size:2.5rem;'>进场成功</p>
+                    <p class='riqi' id='dateTime01' style='font-size:1.5rem;'></p>
+                </div>`;
+            
+            // Ẩn nút làm mới
+            if(document.getElementById('neirong1')) document.getElementById('neirong1').style.display = "none";
+            
+            // Cập nhật thời gian lúc thành công
+            setInterval(function () {
+                const dt = document.getElementById('dateTime01');
+                if (dt) {
+                    dt.innerHTML = (new Date()).format('yyyy-MM-dd hh:mm');
+                }
+            }, 1000);
+        }
+
+        // 5. Logic đồng hồ đếm thời gian (giữ nguyên của bạn)
+        let startTime = localStorage.getItem("startTime");
+        if (!startTime) {
+            startTime = Date.now();
+            localStorage.setItem("startTime", startTime);
+        } else {
+            startTime = parseInt(startTime);
         }
 
         setInterval(function () {
-            const dt = document.getElementById('dateTime01');
-            if (dt) {
-                dt.innerHTML = (new Date()).format('yyyy-MM-dd hh:mm');
+            let diff = Math.floor((Date.now() - startTime) / 1000);
+            let hrs = Math.floor(diff / 3600);
+            let mins = Math.floor((diff % 3600) / 60);
+            let secs = diff % 60;
+
+            if (hrs >= 12) {
+                startTime = Date.now();
+                localStorage.setItem("startTime", startTime);
+                hrs = 0; mins = 0; secs = 0;
             }
+
+            let displayTime = (hrs > 0 ? hrs + ':' : '') + 
+                             (mins < 10 ? '0' : '') + mins + ':' + 
+                             (secs < 10 ? '0' : '') + secs;
+            document.getElementById('dateTime3').innerHTML = displayTime;
         }, 1000);
-    }
-
-    // 4. Logic đồng hồ đếm giờ (để theo dõi thời gian truy cập)
-    let startTime = localStorage.getItem("startTime");
-    if (!startTime) {
-        startTime = Date.now();
-        localStorage.setItem("startTime", startTime);
-    } else {
-        startTime = parseInt(startTime);
-    }
-
-    setInterval(function () {
-        let diff = Math.floor((Date.now() - startTime) / 1000);
-        let hrs = Math.floor(diff / 3600);
-        let mins = Math.floor((diff % 3600) / 60);
-        let secs = diff % 60;
-
-        // Reset sau 12 tiếng
-        if (hrs >= 12) {
-            startTime = Date.now();
-            localStorage.setItem("startTime", startTime);
-            hrs = 0; mins = 0; secs = 0;
-        }
-
-        document.getElementById('dateTime3').innerHTML = 
-            (hrs > 0 ? hrs + ':' : '') + 
-            (mins < 10 ? '0' : '') + mins + ':' + 
-            (secs < 10 ? '0' : '') + secs;
-    }, 1000);
-
-    // 5. Service Worker (PWA)
-    if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('sw.js').catch(err => console.log("SW error", err));
-    }
-</script>
-
+    </script>
 </body>
 </html>
