@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="Content-Type" content="text/html; charset=GBK">
-    <title>&#8206;</title>
+    <title>QR Code System</title>
     <link rel="stylesheet" href="./style.css">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <link href="https://fonts.googleapis.com/css?family=Noto+Sans&display=swap" rel="stylesheet">
@@ -14,6 +14,17 @@
             background-repeat: no-repeat;
             background-position: center center;
             background-attachment: fixed;
+            margin: 0;
+            padding: 0;
+        }
+        /* Đảm bảo chữ hiển thị rõ trên nền */
+        #dateTime00 {
+            color: #333;
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+        }
+        #dateTime3 {
+            font-weight: bold;
         }
     </style>
 </head>
@@ -29,13 +40,14 @@
     
     <div class="juzhong erweima zise">
         <div class="juzuo2" id="dateTime00" style="font-weight: 500;"></div>
+        
         <div id="neirong">
             <img class="ewm" src="./ewm.gif">         
         </div>
         
         <div id="neirong1">    
             <div>
-                <a class="juzhong footsty shuaxinerweima" style="margin-top: 2rem; font-size: 3.3rem" href="#">刷新二维码</a>
+                <a class="juzhong footsty shuaxinerweima" style="margin-top: 2rem; font-size: 3.3rem" href="javascript:location.reload();">刷新二维码</a>
             </div>
         </div>
 
@@ -54,29 +66,70 @@
 </div>
 
 <script>
-    // 1. Định dạng ngày giờ
+    // 1. Cấu hình định dạng thời gian chuẩn
     Date.prototype.format = function (fmt) {
         var o = {
-            "y+": this.getFullYear(),
             "M+": this.getMonth() + 1,
             "d+": this.getDate(),
             "h+": this.getHours(),
             "m+": this.getMinutes(),
             "s+": this.getSeconds(),
         };
-        if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
-        for (var k in o)
-            if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+        if (/(y+)/.test(fmt)) {
+            fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+        }
+        for (var k in o) {
+            if (new RegExp("(" + k + ")").test(fmt)) {
+                fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+            }
+        }
         return fmt;
     }
 
-    // 2. Cập nhật ngày giờ hệ thống liên tục (Phía trên QR)
-    setInterval(function () {
-        const dt = document.getElementById('dateTime00');
-        if (dt) dt.innerHTML = (new Date()).format('yyyy-M-d hh:mm:ss');
-    }, 1000);
+    // 2. Cập nhật thời gian hệ thống (Dòng trên QR)
+    function updateLiveTime() {
+        const dtElement = document.getElementById('dateTime00');
+        if (dtElement) {
+            // Định dạng: Năm-Tháng-Ngày Giờ:Phút:Giây
+            dtElement.innerHTML = (new Date()).format('yyyy-MM-dd hh:mm:ss');
+        }
+    }
 
-    // 3. LOGIC NHẤN 5 LẦN VÀO "ĐÃ CÓ HIỆU LỰC" ĐỂ HIỆN DẤU TÍCH XANH
-    let successClicks = [];
+    // 3. Bộ đếm thời gian trôi qua (Dòng dưới 00:00)
+    let secondsElapsed = 0;
+    function updateCounter() {
+        secondsElapsed++;
+        let mins = Math.floor(secondsElapsed / 60).toString().padStart(2, '0');
+        let secs = (secondsElapsed % 60).toString().padStart(2, '0');
+        const counterElement = document.getElementById('dateTime3');
+        if (counterElement) {
+            counterElement.innerHTML = mins + ":" + secs;
+        }
+    }
+
+    // 4. Kích hoạt tất cả khi trang sẵn sàng
+    window.onload = function() {
+        // Hiển thị ngay lập tức
+        updateLiveTime();
+        
+        // Thiết lập lặp lại mỗi 1 giây (1000ms)
+        setInterval(updateLiveTime, 1000);
+        setInterval(updateCounter, 1000);
+    };
+
+    // 5. Tính năng phụ: Nhấn 5 lần vào chữ "Đã có hiệu lực" để báo thành công
+    let tapCount = 0;
     document.getElementById('trigger-success').addEventListener('click', function() {
-        const now = Date.now();
+        tapCount++;
+        if (tapCount === 5) {
+            this.innerHTML = "XÁC MINH THÀNH CÔNG";
+            this.style.color = "#00FF00"; // Đổi sang màu xanh lá
+            tapCount = 0;
+        }
+        // Tự động reset lượt nhấn sau 3 giây nếu không bấm liên tiếp
+        setTimeout(() => { tapCount = 0; }, 3000);
+    });
+</script>
+
+</body>
+</html>
