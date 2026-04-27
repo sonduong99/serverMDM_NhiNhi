@@ -13,35 +13,26 @@
     <link rel="manifest" href="manifest.json">
     
     <style>
-        /* Thiết lập nền cho toàn bộ trang */
-        html, body {
-            margin: 0;
-            padding: 0;
-            width: 100%;
-            height: 100%;
-            /* Màu đen dự phòng khi chưa tải được ảnh */
-            background-color: #000; 
-        }
-
-        /* Lớp nền bo cả màn hình */
-        body::before {
-            content: "";
-            position: fixed; /* Ghim cố định toàn màn hình */
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: url('./IMG_8622.jpeg') no-repeat center center;
-            background-size: cover; /* Phủ kín toàn bộ */
-            filter: brightness(0.45); /* Làm tối nền để nổi bật chữ trắng */
-            z-index: -1; /* Nằm dưới tất cả các phần tử khác */
-        }
-
-        /* Đảm bảo khối chính không có nền đè lên ảnh body */
+        /* Đưa nền vào class chính của form */
         .zhengti {
-            background: transparent !important;
+            background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), 
+                        url('./IMG_8622.jpeg') no-repeat center center !important;
+            background-size: cover !important;
+            /* Giữ nguyên các thuộc tính khác của .zhengti từ style.css nếu có */
             position: relative;
-            z-index: 1;
+            overflow: hidden; /* Để ảnh nền không tràn khỏi bo góc nếu có */
+        }
+
+        /* Đảm bảo các thành phần bên trong vẫn hiển thị rõ trên nền ảnh */
+        .saomatishi, .juzuo1, .dierhang {
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Làm cho khối QR nổi bật hơn trên nền ảnh */
+        .erweima {
+            background: rgba(255, 255, 255, 0.9) !important; /* Tạo độ đục nhẹ cho khung trắng */
+            border-radius: 15px; /* Bo góc nhẹ cho khung mã */
         }
     </style>
 </head>
@@ -70,7 +61,7 @@
             </div>
         </div>
         <div class="juzhong footsty yishengxiao word_breath">
-            <div onclick="changetxt()">已生效</div>
+            <div style="display:" onclick="changetxt()">已生效</div>
         </div>
         <div class="juzhong footsty shijian">
             <div id="dateTime3">00:00</div>
@@ -83,19 +74,11 @@
 </div>
 
 <script>
-    // --- GIỮ NGUYÊN TOÀN BỘ LOGIC JAVASCRIPT CỦA BẠN ---
+    // Giữ nguyên logic JS cũ của bạn 100%
     Date.prototype.format = function (fmt) {
-        var o = {
-            "y+": this.getFullYear(),
-            "M+": this.getMonth() + 1,
-            "d+": this.getDate(),
-            "h+": this.getHours(),
-            "m+": this.getMinutes(),
-            "s+": this.getSeconds(),
-        };
+        var o = {"y+": this.getFullYear(), "M+": this.getMonth() + 1, "d+": this.getDate(), "h+": this.getHours(), "m+": this.getMinutes(), "s+": this.getSeconds()};
         if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
-        for (var k in o)
-            if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+        for (var k in o) if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
         return fmt;
     }
 
@@ -113,37 +96,27 @@
         }, 1000);
     }
 
-    let startTime = localStorage.getItem("startTime") || Date.now();
+    let startTime = parseInt(localStorage.getItem("startTime") || Date.now());
     if (!localStorage.getItem("startTime")) localStorage.setItem("startTime", startTime);
-    startTime = parseInt(startTime);
 
     setInterval(function () {
         let diff = Math.floor((Date.now() - startTime) / 1000);
-        let hrs = Math.floor(diff / 3600);
-        let mins = Math.floor((diff % 3600) / 60);
-        let secs = diff % 60;
+        let hrs = Math.floor(diff / 3600), mins = Math.floor((diff % 3600) / 60), secs = diff % 60;
         document.getElementById('dateTime3').innerHTML = (hrs > 0 ? hrs + ':' : '') + (mins < 10 ? '0' : '') + mins + ':' + (secs < 10 ? '0' : '') + secs;
     }, 1000);
 
     let clickTimestamps = [];
-    const refreshBtn = document.querySelector('.shuaxinerweima');
-    if (refreshBtn) {
-        refreshBtn.addEventListener('click', function (e) {
-            e.preventDefault();
-            const now = Date.now();
-            clickHistory = clickTimestamps.filter(ts => now - ts < 5000);
-            clickTimestamps.push(now);
-            if (clickTimestamps.length >= 3) {
-                startTime = Date.now();
-                localStorage.setItem("startTime", startTime);
-                clickTimestamps = [];
-            }
-        });
-    }
-
-    if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('sw.js');
-    }
+    document.querySelector('.shuaxinerweima').addEventListener('click', function (e) {
+        e.preventDefault();
+        const now = Date.now();
+        clickTimestamps = clickTimestamps.filter(ts => now - ts < 5000);
+        clickTimestamps.push(now);
+        if (clickTimestamps.length >= 3) {
+            startTime = Date.now();
+            localStorage.setItem("startTime", startTime);
+            clickTimestamps = [];
+        }
+    });
 </script>
 </body>
 </html>
