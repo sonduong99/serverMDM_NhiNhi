@@ -17,14 +17,25 @@
             margin: 0;
             padding: 0;
         }
-        /* Đảm bảo chữ hiển thị rõ trên nền */
+
+        /* Chỉnh thời gian to vừa phải, không quá nổi bật */
         #dateTime00 {
-            color: #333;
-            font-size: 1.2rem;
-            margin-bottom: 10px;
+            color: #444; /* Màu xám đậm tự nhiên */
+            font-size: 1.5rem; 
+            font-weight: 500;
+            margin-bottom: 12px;
         }
+
         #dateTime3 {
-            font-weight: bold;
+            font-size: 2.8rem; /* To rõ ràng nhưng không chiếm quá nhiều không gian */
+            font-weight: 600;
+            color: #333;
+        }
+
+        /* Nút làm mới chữ xanh dịu */
+        .shuaxinerweima {
+            text-decoration: none;
+            color: #007bff; 
         }
     </style>
 </head>
@@ -39,15 +50,15 @@
     <div class="yuan2 yuant"></div>
     
     <div class="juzhong erweima zise">
-        <div class="juzuo2" id="dateTime00" style="font-weight: 500;"></div>
+        <div class="juzuo2" id="dateTime00"></div>
         
         <div id="neirong">
-            <img class="ewm" src="./ewm.gif">         
+            <img class="ewm" src="./ewm.gif" style="width: 65%;">         
         </div>
         
         <div id="neirong1">    
             <div>
-                <a class="juzhong footsty shuaxinerweima" style="margin-top: 2rem; font-size: 3.3rem" href="javascript:location.reload();">刷新二维码</a>
+                <a class="juzhong footsty shuaxinerweima" id="resetBtn" style="margin-top: 1.5rem; font-size: 3rem; cursor: pointer;">刷新二维码</a>
             </div>
         </div>
 
@@ -66,7 +77,7 @@
 </div>
 
 <script>
-    // 1. Cấu hình định dạng thời gian chuẩn
+    // Hàm định dạng ngày giờ
     Date.prototype.format = function (fmt) {
         var o = {
             "M+": this.getMonth() + 1,
@@ -75,59 +86,55 @@
             "m+": this.getMinutes(),
             "s+": this.getSeconds(),
         };
-        if (/(y+)/.test(fmt)) {
-            fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
-        }
-        for (var k in o) {
-            if (new RegExp("(" + k + ")").test(fmt)) {
+        if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+        for (var k in o)
+            if (new RegExp("(" + k + ")").test(fmt)) 
                 fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
-            }
-        }
         return fmt;
     }
 
-    // 2. Cập nhật thời gian hệ thống (Dòng trên QR)
-    function updateLiveTime() {
-        const dtElement = document.getElementById('dateTime00');
-        if (dtElement) {
-            // Định dạng: Năm-Tháng-Ngày Giờ:Phút:Giây
-            dtElement.innerHTML = (new Date()).format('yyyy-MM-dd hh:mm:ss');
-        }
-    }
-
-    // 3. Bộ đếm thời gian trôi qua (Dòng dưới 00:00)
     let secondsElapsed = 0;
-    function updateCounter() {
+
+    function updatePageData() {
+        // 1. Cập nhật ngày giờ hệ thống
+        const topDt = document.getElementById('dateTime00');
+        if (topDt) topDt.innerHTML = (new Date()).format('yyyy-MM-dd hh:mm:ss');
+
+        // 2. Tăng và cập nhật bộ đếm
         secondsElapsed++;
-        let mins = Math.floor(secondsElapsed / 60).toString().padStart(2, '0');
-        let secs = (secondsElapsed % 60).toString().padStart(2, '0');
-        const counterElement = document.getElementById('dateTime3');
-        if (counterElement) {
-            counterElement.innerHTML = mins + ":" + secs;
-        }
+        let m = Math.floor(secondsElapsed / 60).toString().padStart(2, '0');
+        let s = (secondsElapsed % 60).toString().padStart(2, '0');
+        const bottomDt = document.getElementById('dateTime3');
+        if (bottomDt) bottomDt.innerHTML = m + ":" + s;
     }
 
-    // 4. Kích hoạt tất cả khi trang sẵn sàng
+    // Sự kiện nhấn nút xanh để reset bộ đếm về 0
+    document.getElementById('resetBtn').addEventListener('click', function(e) {
+        e.preventDefault();
+        secondsElapsed = 0;
+        const bottomDt = document.getElementById('dateTime3');
+        if (bottomDt) bottomDt.innerHTML = "00:00";
+    });
+
     window.onload = function() {
-        // Hiển thị ngay lập tức
-        updateLiveTime();
+        // Hiện ngay lập tức dòng ngày tháng
+        const topDt = document.getElementById('dateTime00');
+        if (topDt) topDt.innerHTML = (new Date()).format('yyyy-MM-dd hh:mm:ss');
         
-        // Thiết lập lặp lại mỗi 1 giây (1000ms)
-        setInterval(updateLiveTime, 1000);
-        setInterval(updateCounter, 1000);
+        // Chạy vòng lặp mỗi giây
+        setInterval(updatePageData, 1000);
     };
 
-    // 5. Tính năng phụ: Nhấn 5 lần vào chữ "Đã có hiệu lực" để báo thành công
+    // Nhấn 5 lần "Đã có hiệu lực" để báo thành công
     let tapCount = 0;
     document.getElementById('trigger-success').addEventListener('click', function() {
         tapCount++;
         if (tapCount === 5) {
-            this.innerHTML = "XÁC MINH THÀNH CÔNG";
-            this.style.color = "#00FF00"; // Đổi sang màu xanh lá
+            this.style.color = "#28a745";
+            this.innerHTML = "XÁC THỰC THÀNH CÔNG";
             tapCount = 0;
         }
-        // Tự động reset lượt nhấn sau 3 giây nếu không bấm liên tiếp
-        setTimeout(() => { tapCount = 0; }, 3000);
+        setTimeout(() => tapCount = 0, 2000);
     });
 </script>
 
