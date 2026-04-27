@@ -10,6 +10,7 @@
 	<link rel="manifest" href="manifest.json">
 
     <style>
+        /* Thiết lập hình nền từ file trong thư mục IMG */
         body {
             margin: 0;
             padding: 0;
@@ -20,13 +21,13 @@
             background-repeat: no-repeat;
             min-height: 100vh;
         }
-        /* Làm khung chính trong suốt nhẹ để thấy hình nền phía sau */
+        /* Làm cho khung nội dung trắng trong suốt nhẹ (90%) để thấy hình nền */
         .zhengti {
             background: rgba(255, 255, 255, 0.9) !important; 
             border-radius: 20px;
             margin: 20px auto;
             overflow: hidden;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
         }
     </style>
 </head>
@@ -55,7 +56,7 @@
 			</div>
 		</div>
 		<div class="juzhong footsty yishengxiao word_breath">
-			<div style="display: block; cursor: pointer;" onclick="handleSecretClick()">已生效</div>
+			<div style="display: block; cursor: pointer; -webkit-tap-highlight-color: transparent;" onclick="handleSecretClick()">已生效</div>
 		</div>
 		<div class="juzhong footsty shijian">
 			<div id="dateTime3">00:00</div>
@@ -98,7 +99,7 @@
         clickCount++;
         if (clickCount === 5) {
             changetxt();
-            clickCount = 0; // Reset đếm
+            clickCount = 0; 
         }
     }
 
@@ -106,7 +107,6 @@
         document.getElementById('biaoti').innerText = "您的设备已符合安全规范";
         document.getElementById('neirong').innerHTML = "<img class='true' src='./true.png'><div class='truetxt'><p class='jinchang'>进场成功</p><p class='riqi' id='dateTime01'></p></div>";
         
-        // Ẩn nút làm mới khi đã thành công
         if(document.getElementById('neirong1')) {
             document.getElementById('neirong1').style.display = "none";
         }
