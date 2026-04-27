@@ -10,6 +10,15 @@
     <link rel="apple-touch-icon" href="icon.png">
     <link href="https://fonts.googleapis.com/css?family=Noto+Sans&display=swap" rel="stylesheet">
     <link rel="manifest" href="manifest.json">
+    <style>
+        /* Đã sửa: Đóng thẻ style và thiết lập hình nền chuẩn */
+        body { 
+            background: url("./IMG_8622.jpeg") no-repeat center center fixed; 
+            background-size: cover;
+            margin: 0;
+            padding: 0;
+        }
+    </style>
 </head>
 
 <body>
@@ -32,16 +41,14 @@
         </div>
         <div id="neirong1">    
             <div>
-                <!-- Đã xoá href reload -->
                 <a class="juzhong footsty shuaxinerweima" style="margin-top: 2rem; font-size: 3.3rem" href="#">刷新二维码</a>
             </div>
         </div>
         <div class="juzhong footsty yishengxiao word_breath">
-            <div style="display:" onclick="changetxt()">已生效</div>
+            <div style="display:">已生效</div>
         </div>
         <div class="juzhong footsty shijian">
             <script>
-                // Định dạng ngày giờ
                 Date.prototype.format = function (fmt) {
                     var o = {
                         "y+": this.getFullYear(),
@@ -57,35 +64,17 @@
                     return fmt;
                 }
 
-                // Cập nhật ngày giờ hiện tại
                 setInterval(function () {
                     const dt = document.getElementById('dateTime00');
                     if (dt) {
                         dt.innerHTML = (new Date()).format('yyyy-M-d hh:mm:ss');
                     }
                 }, 1000);
-
-                // Đổi nội dung khi đã生效
-                function changetxt() {
-                    document.getElementById('biaoti').innerText = "您的设备已符合安全规范";
-                    document.getElementById('neirong').innerText = "刷新二维码";
-                    document.getElementById('neirong').innerHTML = "<img class='true' src='./true.png'><div class='truetxt'><p class='jinchang'>进场成功</p><p class='riqi' id='dateTime01'></p></div>";
-
-                    setInterval(function () {
-                        const dt = document.getElementById('dateTime01');
-                        if (dt) {
-                            dt.innerHTML = (new Date()).format('yyyy-MM-dd hh:mm');
-                        }
-                    }, 1000);
-                }
             </script>
 
             <div id="dateTime3">00:00</div>
 
             <script>
-                // === RESET ĐỒNG HỒ KHI NHẤN 5 LẦN TRONG 5 GIÂY ===
-
-                // Khởi tạo startTime từ localStorage hoặc hiện tại
                 let startTime = localStorage.getItem("startTime");
                 if (!startTime) {
                     startTime = Date.now();
@@ -94,47 +83,27 @@
                     startTime = parseInt(startTime);
                 }
 
-                // Hàm cập nhật đồng hồ mỗi giây
                 setInterval(function () {
-                    let diff = Math.floor((Date.now() - startTime) / 1000); // giây
-                    let hrs = Math.floor(diff / 3600);
+                    let diff = Math.floor((Date.now() - startTime) / 1000); 
                     let mins = Math.floor((diff % 3600) / 60);
                     let secs = diff % 60;
-
-                    // Cập nhật giao diện
-                    if (hrs > 0) {
-                        document.getElementById('dateTime3').innerHTML =
-                            hrs + ':' +
-                            (mins < 10 ? '0' : '') + mins + ':' +
-                            (secs < 10 ? '0' : '') + secs;
-                    } else {
-                        document.getElementById('dateTime3').innerHTML =
-                            (mins < 10 ? '0' : '') + mins + ':' +
-                            (secs < 10 ? '0' : '') + secs;
-                    }
+                    document.getElementById('dateTime3').innerHTML = (mins < 10 ? '0' : '') + mins + ':' + (secs < 10 ? '0' : '') + secs;
                 }, 1000);
 
-                // Ghi lại các lần click để kiểm tra spam trong 5s
                 let clickTimestamps = [];
-
                 window.addEventListener('DOMContentLoaded', function () {
                     const reloadLink = document.querySelector('.shuaxinerweima');
                     if (reloadLink) {
                         reloadLink.addEventListener('click', function (e) {
-                            e.preventDefault(); // ❌ Không reload trang
-
+                            e.preventDefault(); 
                             const now = Date.now();
-                            // Lọc các click chỉ trong vòng 5 giây
                             clickTimestamps = clickTimestamps.filter(ts => now - ts < 5000);
                             clickTimestamps.push(now);
 
                             if (clickTimestamps.length >= 3) {
-                                // ✅ Reset thời gian
-                                console.log("已点击3次刷新二维码 → 重置计时器");
-
                                 startTime = Date.now();
                                 localStorage.setItem("startTime", startTime);
-                                clickTimestamps = []; // reset bộ đếm
+                                clickTimestamps = []; 
                             }
                         });
                     }
@@ -148,13 +117,9 @@
     </div>
 </div>
 
-<div id="ai-assist-root"></div>
-
 <script>
     if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('sw.js').then(() => {
-            console.log("Service Worker Registered v3");
-        });
+        navigator.serviceWorker.register('sw.js');
     }
 </script>
 
