@@ -1,140 +1,97 @@
 <!DOCTYPE html>
-<html>
+<html lang="vi">
 <head>
     <meta charset="UTF-8">
+    <title>QR Security</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <link rel="stylesheet" href="./style.css">
     <link href="https://fonts.googleapis.com/css?family=Noto+Sans&display=swap" rel="stylesheet">
-    <style>
-        /* NỀN BO CẢ GIAO DIỆN */
-        body { 
-            background: url("./IMG_8622.jpeg") no-repeat center center fixed; 
-            background-size: cover; 
-            margin: 0;
-            padding: 0;
-        }
-
-        /* Đảm bảo giao diện cũ nằm trên nền */
-        .zhengti {
-            position: relative;
-            z-index: 1;
-            background: transparent !important;
-        }
-        
-        /* THANH TIÊU ĐỀ: Vàng, Chữ TRẮNG, độ mảnh bình thường */
-        .saomatishi { 
-            background: #ffc526 !important; 
-            color: #ffffff !important; 
-            font-weight: 400 !important; 
-            letter-spacing: normal; 
-        }
-
-        /* KHUNG TRẮNG: Bo góc và đổ bóng nhẹ */
-        .erweima {
-            background: rgba(255, 255, 255, 0.95) !important;
-            border-radius: 15px;
-        }
-
-        /* Ngày tháng màu ĐEN, khoảng cách phía trên 4rem */
-        #dateTime00 { 
-            padding-top: 4rem; 
-            margin-bottom: 1rem; 
-            color: #000000;
-            font-weight: 500; 
-        }
-        
-        #neirong1 { padding: 0.5rem 0 0.5rem; }
-
-        /* NÚT BẤM: Chữ tiếng Trung, màu ĐEN, to 3.3rem */
-        .shuaxinerweima { 
-            text-decoration: none; 
-            display: block; 
-            color: #000000 !important; 
-            margin: 0; 
-            font-weight: normal; 
-            font-size: 3.3rem;
-        }
-
-        /* BỘ ĐẾM THỜI GIAN (TIMER): Chữ Trung & số chuẩn */
-        .shijian {
-            padding-bottom: 4rem;
-            color: #000000;
-            font-size: 1.5rem;
-            font-weight: bold;
-        }
-
-        /* DÒNG THÔNG BÁO DƯỚI CÙNG (Làm sáng để nổi trên nền ảnh) */
-        .dierhang {
-            color: #ffffff;
-            text-shadow: 1px 1px 3px rgba(0,0,0,0.8);
-            padding: 20px;
-            text-align: center;
-        }
-    </style>
+    <link rel="manifest" href="manifest.json">
 </head>
-<body>
-    <p><br><br></p>    
-    <div class="zhengti">
-        <div class="juzuo1" style="color: white; text-shadow: 1px 1px 2px #000;">
-            V25051817 (Pham Son Duong)
-        </div>
-        
-        <div class="saomatishi juzhong">将二维码对准扫描器扫码进出场</div>
-        
-        <div class="yuan1 yuant"></div><div class="yuan2 yuant"></div>
-        
-        <div class="juzhong erweima zise">
-            <div id="dateTime00" class="juzuo2"></div>
-            
-            <div id="neirong"><img class="ewm" src="./ewm.gif"></div>
-            
-            <div id="neirong1">
-                <a class="shuaxinerweima juzhong footsty" href="#">刷新二维码</a>
-            </div>
 
-            <div class="juzhong footsty shijian" id="dateTime3">00:00</div>
-        </div>
+<body>
+<div class="zhengti">
+    <div class="juzuo1">V25084114 (Ryo Doan)</div>
+    <div class="saomatishi juzhong" id="biaoti">将二维码对准扫描器扫码进出场</div>
+    
+    <div class="yuan1 yuant"></div>
+    <div class="yuan2 yuant"></div>
+    
+    <div class="juzhong erweima zise">
+        <div id="dateTime00" class="juzuo2" style="font-weight: 500;"></div>
         
-        <div class="dierhang">尊敬的员工您好，您已进入企业涉密区域，出于企业安全考虑，您的手机摄像头将被禁止拍摄，感谢您的配合。</div>
+        <div id="main-content">
+            <div id="qr-container">
+                <img class="ewm" src="./ewm.gif" alt="QR Code">
+                <a class="juzhong footsty shuaxinerweima" id="btn-refresh" style="margin-top: 2rem; font-size: 3.3rem" href="#">刷新二维码</a>
+            </div>
+        </div>
+
+        <div class="juzhong footsty yishengxiao word_breath">
+            <div onclick="handleSuccess()">已生效</div>
+        </div>
+
+        <div class="juzhong footsty shijian" id="timer-display">00:00</div>
     </div>
 
+    <div class="dierhang">
+        尊敬的员工您好，您已进入企业涉密区域，出于企业安全考虑，您的手机摄像头将被禁止拍摄，感谢您的配合。
+    </div>
+</div>
+
 <script>
-    // 1. Cập nhật Ngày/Giờ hệ thống
-    function updateDateTime() {
-        const d = new Date();
-        const datePart = `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`;
-        const timePart = d.toTimeString().split(' ')[0]; 
-        document.getElementById('dateTime00').innerText = `${datePart} ${timePart}`;
-    }
+    // --- CẤU HÌNH & KHỞI TẠO ---
+    const elDateTime = document.getElementById('dateTime00');
+    const elTimer = document.getElementById('timer-display');
+    const elRefresh = document.getElementById('btn-refresh');
+    const elMainContent = document.getElementById('main-content');
+    const elTitle = document.getElementById('biaoti');
 
-    // 2. Bộ đếm thời gian (Timer)
-    let startTime = localStorage.getItem("startTime") || Date.now();
-    if (!localStorage.getItem("startTime")) localStorage.setItem("startTime", startTime);
-    startTime = parseInt(startTime);
-
-    function updateTimer() {
-        let diff = Math.floor((Date.now() - startTime) / 1000);
-        let hrs = Math.floor(diff / 3600);
-        let mins = Math.floor((diff % 3600) / 60);
-        let secs = diff % 60;
-        
-        let display = (hrs > 0 ? hrs + ':' : '') + 
-                      (mins < 10 ? '0' : '') + mins + ':' + 
-                      (secs < 10 ? '0' : '') + secs;
-        document.getElementById('dateTime3').innerText = display;
-    }
-
-    // Chạy đồng thời cả 2 đồng hồ
-    setInterval(() => {
-        updateDateTime();
-        updateTimer();
-    }, 1000);
-    
-    updateDateTime();
-    updateTimer();
-
-    // 3. Logic Reset: Nhấn 3 lần trong 5 giây vào nút "刷新二维码"
     let clickHistory = [];
-    document.querySelector('.shuaxinerweima').onclick = e => {
+    let startTime = parseInt(localStorage.getItem("startTime")) || Date.now();
+    if (!localStorage.getItem("startTime")) localStorage.setItem("startTime", startTime);
+
+    // --- CÁC HÀM TIỆN ÍCH ---
+
+    // Định dạng thời gian (Helper)
+    const formatTime = (date, pattern = 'full') => {
+        const pad = (n) => String(n).padStart(2, '0');
+        const y = date.getFullYear(), M = date.getMonth() + 1, d = date.getDate();
+        const h = date.getHours(), m = date.getMinutes(), s = date.getSeconds();
+        
+        if (pattern === 'short') return `${y}-${pad(M)}-${pad(d)} ${pad(h)}:${pad(m)}`;
+        return `${y}-${M}-${d} ${pad(h)}:${pad(m)}:${pad(s)}`;
+    };
+
+    // Cập nhật đồng hồ bấm giờ
+    const updateTimer = () => {
+        const diff = Math.floor((Date.now() - startTime) / 1000);
+        const hrs = Math.floor(diff / 3600);
+        const mins = Math.floor((diff % 3600) / 60);
+        const secs = diff % 60;
+
+        const timeString = hrs > 0 
+            ? `${hrs}:${pad(mins)}:${pad(secs)}` 
+            : `${pad(mins)}:${pad(secs)}`;
+        elTimer.textContent = timeString;
+    };
+    const pad = (n) => String(n).padStart(2, '0');
+
+    // --- XỬ LÝ SỰ KIỆN ---
+
+    // Khi nhấn "Đã生效" (Success)
+    window.handleSuccess = () => {
+        elTitle.innerText = "您的设备已符合安全规范";
+        elMainContent.innerHTML = `
+            <img class="true" src="./true.png">
+            <div class="truetxt">
+                <p class="jinchang">进场成功</p>
+                <p class="riqi">${formatTime(new Date(), 'short')}</p>
+            </div>`;
+    };
+
+    // Khi nhấn Làm mới QR (Reset timer nếu click 3 lần/5s)
+    elRefresh.addEventListener('click', (e) => {
         e.preventDefault();
         const now = Date.now();
         clickHistory = clickHistory.filter(ts => now - ts < 5000);
@@ -144,8 +101,21 @@
             startTime = Date.now();
             localStorage.setItem("startTime", startTime);
             clickHistory = [];
+            console.log("Timer Reset!");
         }
-    };
+    });
+
+    // --- VÒNG LẶP CHÍNH (Chạy mỗi giây) ---
+    setInterval(() => {
+        const now = new Date();
+        elDateTime.textContent = formatTime(now);
+        updateTimer();
+    }, 1000);
+
+    // Đăng ký Service Worker
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('sw.js').catch(console.error);
+    }
 </script>
 </body>
 </html>
