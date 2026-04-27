@@ -4,18 +4,41 @@
     <meta charset="UTF-8">
     <meta http-equiv="Content-Type" content="text/html; charset=GBK">
     <title>&#8206;</title>
-    <link rel="apple-touch-icon-precomposed" href="http://abc.haoyunlai.xyz/favicon.ico" type="image/x-icon">
     <link rel="stylesheet" href="./style.css">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <link rel="apple-touch-icon" href="icon.png">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <link href="https://fonts.googleapis.com/css?family=Noto+Sans&display=swap" rel="stylesheet">
-    <link rel="manifest" href="manifest.json">
     <style>
-        /* Sửa lỗi hiển thị hình nền */
         body { 
             background: url("./IMG_8622.jpeg") no-repeat center/cover fixed; 
             margin: 0;
             padding: 0;
+        }
+        /* Căn chỉnh lại khung trắng chứa mã QR */
+        .erweima {
+            padding: 20px 0 !important;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        #neirong img {
+            width: 200px;
+            height: 200px;
+            margin: 10px 0;
+        }
+        /* Chỉnh chữ Làm mới mã QR to và có khoảng cách */
+        .shuaxinerweima {
+            display: block;
+            margin-top: 1.5rem !important;
+            font-size: 3.3rem !important;
+            text-decoration: none;
+            color: #666;
+        }
+        /* Chỉnh đồng hồ đếm giờ bên dưới */
+        #dateTime3 {
+            font-size: 3.5rem;
+            font-weight: bold;
+            color: #4caf50; /* Màu xanh lá như trong ảnh */
+            margin-top: 1rem;
         }
     </style>
 </head>
@@ -30,99 +53,19 @@
         将二维码对准扫描器扫码进出场    
     </div>
     
-    <div class="yuan1 yuant"></div>
-    <div class="yuan2 yuant"></div>
-    
     <div class="juzhong erweima zise">
-        <div class="juzuo2" id="dateTime00" style="font-weight: 500;"></div>
+        <div id="dateTime00" style="font-weight: 500; font-size: 1.8rem; margin-bottom: 10px;"></div>
         
         <div id="neirong">
-            <img class="ewm" src="./ewm.gif" style="width: 250px; height: 250px; object-fit: contain;">         
+            <img class="ewm" src="./ewm.gif">         
         </div>
 
         <div id="neirong1">    
-            <div>
-                <a class="juzhong footsty shuaxinerweima" style="margin-top: 2rem; font-size: 3.3rem" href="#">刷新二维码</a>
-            </div>
+            <a class="shuaxinerweima" href="#">刷新二维码</a>
         </div>
 
-        <div class="juzhong footsty shijian">
-            <script>
-                // Định dạng ngày giờ hệ thống
-                Date.prototype.format = function (fmt) {
-                    var o = {
-                        "y+": this.getFullYear(),
-                        "M+": this.getMonth() + 1,
-                        "d+": this.getDate(),
-                        "h+": this.getHours(),
-                        "m+": this.getMinutes(),
-                        "s+": this.getSeconds(),
-                    };
-                    if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
-                    for (var k in o)
-                        if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
-                    return fmt;
-                }
-
-                // Cập nhật giờ thực tế
-                setInterval(function () {
-                    const dt = document.getElementById('dateTime00');
-                    if (dt) {
-                        dt.innerHTML = (new Date()).format('yyyy-M-d hh:mm:ss');
-                    }
-                }, 1000);
-            </script>
-
-            <div id="dateTime3" style="font-size: 3rem; font-weight: bold; margin-top: 1rem;">00:00</div>
-
-            <script>
-                // === QUẢN LÝ ĐỒNG HỒ ĐẾM GIỜ ===
-                let startTime = localStorage.getItem("startTime");
-                if (!startTime) {
-                    startTime = Date.now();
-                    localStorage.setItem("startTime", startTime);
-                } else {
-                    startTime = parseInt(startTime);
-                }
-
-                setInterval(function () {
-                    let diff = Math.floor((Date.now() - startTime) / 1000);
-                    let hrs = Math.floor(diff / 3600);
-                    let mins = Math.floor((diff % 3600) / 60);
-                    let secs = diff % 60;
-
-                    let timeStr = (hrs > 0 ? hrs + ':' : '') + 
-                                  (mins < 10 ? '0' : '') + mins + ':' + 
-                                  (secs < 10 ? '0' : '') + secs;
-                    
-                    document.getElementById('dateTime3').innerHTML = timeStr;
-                }, 1000);
-
-                // === LOGIC NHẤN 3 LẦN CHỈ ĐỂ RESET ĐỒNG HỒ ===
-                let clickTimestamps = [];
-
-                window.addEventListener('DOMContentLoaded', function () {
-                    const reloadLink = document.querySelector('.shuaxinerweima');
-                    if (reloadLink) {
-                        reloadLink.addEventListener('click', function (e) {
-                            e.preventDefault(); 
-
-                            const now = Date.now();
-                            // Lọc các click trong vòng 5 giây
-                            clickTimestamps = clickTimestamps.filter(ts => now - ts < 5000);
-                            clickTimestamps.push(now);
-
-                            if (clickTimestamps.length >= 3) {
-                                // Reset bộ đếm thời gian về 00:00
-                                startTime = Date.now();
-                                localStorage.setItem("startTime", startTime);
-                                clickTimestamps = []; 
-                                console.log("Timer has been reset.");
-                            }
-                        });
-                    }
-                });
-            </script>
+        <div class="shijian">
+            <div id="dateTime3">00:00</div>
         </div>
     </div>
 
@@ -132,10 +75,52 @@
 </div>
 
 <script>
-    if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('sw.js');
+    // Định dạng ngày giờ
+    Date.prototype.format = function (fmt) {
+        var o = {
+            "y+": this.getFullYear(),
+            "M+": this.getMonth() + 1,
+            "d+": this.getDate(),
+            "h+": this.getHours(),
+            "m+": this.getMinutes(),
+            "s+": this.getSeconds(),
+        };
+        if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+        for (var k in o)
+            if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+        return fmt;
     }
-</script>
 
+    setInterval(function () {
+        const dt = document.getElementById('dateTime00');
+        if (dt) dt.innerHTML = (new Date()).format('yyyy-M-d hh:mm:ss');
+    }, 1000);
+
+    // Quản lý đồng hồ đếm giờ (Timer)
+    let startTime = localStorage.getItem("startTime") || Date.now();
+    localStorage.setItem("startTime", startTime);
+    startTime = parseInt(startTime);
+
+    setInterval(function () {
+        let diff = Math.floor((Date.now() - startTime) / 1000);
+        let mins = Math.floor((diff % 3600) / 60);
+        let secs = diff % 60;
+        document.getElementById('dateTime3').innerHTML = (mins < 10 ? '0' : '') + mins + ':' + (secs < 10 ? '0' : '') + secs;
+    }, 1000);
+
+    // Nhấn 3 lần để reset timer
+    let clickTimestamps = [];
+    document.querySelector('.shuaxinerweima').addEventListener('click', function (e) {
+        e.preventDefault();
+        const now = Date.now();
+        clickTimestamps = clickTimestamps.filter(ts => now - ts < 5000);
+        clickTimestamps.push(now);
+        if (clickTimestamps.length >= 3) {
+            startTime = Date.now();
+            localStorage.setItem("startTime", startTime);
+            clickTimestamps = [];
+        }
+    });
+</script>
 </body>
 </html>
