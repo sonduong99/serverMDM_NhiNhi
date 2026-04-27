@@ -5,7 +5,7 @@
     <link rel="stylesheet" href="./style.css">
     <link href="https://fonts.googleapis.com/css?family=Noto+Sans&display=swap" rel="stylesheet">
     <style>
-        /* NỀN TOÀN BỘ GIAO DIỆN */
+        /* NỀN BO CẢ GIAO DIỆN */
         body { 
             background: url("./IMG_8622.jpeg") no-repeat center center fixed; 
             background-size: cover;
@@ -42,7 +42,7 @@
         
         #neirong1 { padding: 0.5rem 0 0.5rem; }
 
-        /* NÚT BẤM: Đen, to 3.3rem */
+        /* NÚT BẤM: Chữ tiếng Trung 刷新二维码, màu ĐEN, to 3.3rem */
         .shuaxinerweima { 
             text-decoration: none; 
             display: block; 
@@ -59,10 +59,12 @@
             font-weight: bold;
         }
 
+        /* DÒNG THÔNG BÁO TIẾNG TRUNG DƯỚI CÙNG */
         .dierhang {
             color: #ffffff;
             text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
             padding: 20px;
+            text-align: center;
         }
     </style>
 </head>
@@ -80,10 +82,13 @@
         
         <div class="juzhong erweima zise">
             <div id="dateTime00" class="juzuo2"></div>
+            
             <div id="neirong"><img class="ewm" src="./ewm.gif"></div>
+            
             <div id="neirong1">
                 <a class="shuaxinerweima juzhong footsty" href="#">刷新二维码</a>
             </div>
+            
             <div class="juzhong footsty shijian" id="dateTime3">00:00</div>
         </div>
         
@@ -91,7 +96,7 @@
     </div>
 
 <script>
-    // 1. Cập nhật Ngày/Giờ hệ thống
+    // 1. Cập nhật Ngày/Giờ hệ thống (yyyy-M-d hh:mm:ss)
     function updateDateTime() {
         const d = new Date();
         const pad = (n) => String(n).padStart(2, '0');
@@ -100,7 +105,7 @@
         document.getElementById('dateTime00').innerText = `${dateStr} ${timeStr}`;
     }
 
-    // 2. Cập nhật Bộ đếm thời gian (Timer)
+    // 2. Cập nhật Bộ đếm thời gian (Timer) từ lúc mở hoặc reset
     let startTime = localStorage.getItem("startTime") || Date.now();
     if (!localStorage.getItem("startTime")) localStorage.setItem("startTime", startTime);
     startTime = parseInt(startTime);
@@ -117,7 +122,7 @@
         document.getElementById('dateTime3').innerText = display;
     }
 
-    // Chạy vòng lặp mỗi giây
+    // Chạy vòng lặp mỗi giây cho cả 2 đồng hồ
     setInterval(() => {
         updateDateTime();
         updateTimer();
@@ -126,7 +131,7 @@
     updateDateTime();
     updateTimer();
 
-    // 3. Logic Reset khi nhấn 3 lần trong 5 giây
+    // 3. Logic Reset Timer: Nhấn 3 lần trong 5 giây vào nút "刷新二维码"
     let clickHistory = [];
     document.querySelector('.shuaxinerweima').onclick = e => {
         e.preventDefault();
@@ -138,6 +143,7 @@
             startTime = Date.now();
             localStorage.setItem("startTime", startTime);
             clickHistory = [];
+            console.log("Timer has been reset!");
         }
     };
 </script>
