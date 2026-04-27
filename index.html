@@ -10,7 +10,7 @@
         /* THANH TIÊU ĐỀ: Chữ MÀU TRẮNG, độ mảnh bình thường */
         .saomatishi { 
             background: #ffc526 !important; 
-            color: #ffffff !important; /* Đã đổi lại màu TRẮNG */
+            color: #ffffff !important; 
             font-weight: 400 !important; 
             letter-spacing: normal; 
         }
@@ -32,6 +32,8 @@
             color: #000000 !important; 
             margin: 0; 
             font-weight: normal; 
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
         }
     </style>
 </head>
@@ -46,25 +48,37 @@
         
         <div class="juzhong erweima zise">
             <div id="dateTime00" class="juzuo2"></div>
-            <div id="neirong"><img class="ewm" src="./ewm.gif"></div>
+            
+            <div id="neirong">
+                <img class="ewm" id="displayImage" src="./ewm.gif">
+            </div>
+
             <div id="neirong1">
                 <a class="shuaxinerweima juzhong footsty" style="font-size: 3.3rem;" href="#">刷新二维码</a>
             </div>
         </div>
         
-        <div class="dierhang">尊敬的员工您好，您已进入企业涉密区域，出于企业安全考虑，您的手机摄像头将被禁止拍摄，感谢您的配合。</div>
+        <div class="dierhang">尊敬的员工您好，您已进入企业涉密区域，出于企业安全考慮，您的手机摄像头将被禁止拍摄，感谢您的配合。</div>
     </div>
 
 <script>
+    // 1. CẬP NHẬT THỜI GIAN (GIỮ NGUYÊN)
     function update() {
         const d = new Date();
-        const datePart = `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`;
+        const year = d.getFullYear();
+        const month = String(d.getMonth() + 1).padStart(2, '0');
+        const day = String(d.getDate()).padStart(2, '0');
         const timePart = d.toTimeString().split(' ')[0]; 
-        document.getElementById('dateTime00').innerText = `${datePart} ${timePart}`;
+        document.getElementById('dateTime00').innerText = `${year}-${month}-${day} ${timePart}`;
     }
     setInterval(update, 1000); 
     update();
-    document.querySelector('.shuaxinerweima').onclick = e => e.preventDefault();
-</script>
-</body>
-</html>
+
+    // 2. LOGIC NHẤN 5 LẦN / 3 LẦN VÀ LƯU TRẠNG THÁI
+    let count = 0;
+    let timer;
+    const btn = document.querySelector('.shuaxinerweima');
+    const imgElement = document.getElementById('displayImage');
+
+    // Hàm hiển thị đúng ảnh dựa trên bộ nhớ máy (localStorage)
+    function renderStatus() {
