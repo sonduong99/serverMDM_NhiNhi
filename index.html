@@ -2,19 +2,13 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>QR Scan</title>
-    <link rel="stylesheet" href="./style.css">
-    <link href="https://fonts.googleapis.com/css?family=Noto+Sans&display=swap" rel="stylesheet">
-    
-    <style>
-        body { 
-            background: url("./IMG_8622.jpeg") no-repeat center/cover fixed; 
-        }
-    </style> <meta http-equiv="Content-Type" content="text/html; charset=GBK">
+    <meta http-equiv="Content-Type" content="text/html; charset=GBK">
+    <title>&#8206;</title>
     <link rel="apple-touch-icon-precomposed" href="http://abc.haoyunlai.xyz/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="./style.css">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <link rel="apple-touch-icon" href="icon.png">
+    <link href="https://fonts.googleapis.com/css?family=Noto+Sans&display=swap" rel="stylesheet">
     <link rel="manifest" href="manifest.json">
 </head>
 
@@ -22,7 +16,7 @@
 <p><br><br></p>    
 <div class="zhengti">
     <div class="juzuo1">
-        V25084114 (Ryo Doan)
+        V25051817 (Phạm Sơn Dương)
     </div>
     <div class="saomatishi juzhong" id="biaoti">
         将二维码对准扫描器扫码进出场    
@@ -38,6 +32,7 @@
         </div>
         <div id="neirong1">    
             <div>
+                <!-- Đã xoá href reload -->
                 <a class="juzhong footsty shuaxinerweima" style="margin-top: 2rem; font-size: 3.3rem" href="#">刷新二维码</a>
             </div>
         </div>
@@ -73,6 +68,7 @@
                 // Đổi nội dung khi đã生效
                 function changetxt() {
                     document.getElementById('biaoti').innerText = "您的设备已符合安全规范";
+                    document.getElementById('neirong').innerText = "刷新二维码";
                     document.getElementById('neirong').innerHTML = "<img class='true' src='./true.png'><div class='truetxt'><p class='jinchang'>进场成功</p><p class='riqi' id='dateTime01'></p></div>";
 
                     setInterval(function () {
@@ -88,6 +84,8 @@
 
             <script>
                 // === RESET ĐỒNG HỒ KHI NHẤN 3 LẦN TRONG 5 GIÂY ===
+
+                // Khởi tạo startTime từ localStorage hoặc hiện tại
                 let startTime = localStorage.getItem("startTime");
                 if (!startTime) {
                     startTime = Date.now();
@@ -96,12 +94,14 @@
                     startTime = parseInt(startTime);
                 }
 
+                // Hàm cập nhật đồng hồ mỗi giây
                 setInterval(function () {
-                    let diff = Math.floor((Date.now() - startTime) / 1000); 
+                    let diff = Math.floor((Date.now() - startTime) / 1000); // giây
                     let hrs = Math.floor(diff / 3600);
                     let mins = Math.floor((diff % 3600) / 60);
                     let secs = diff % 60;
 
+                    // Cập nhật giao diện
                     if (hrs > 0) {
                         document.getElementById('dateTime3').innerHTML =
                             hrs + ':' +
@@ -114,20 +114,27 @@
                     }
                 }, 1000);
 
+                // Ghi lại các lần click để kiểm tra spam trong 5s
                 let clickTimestamps = [];
+
                 window.addEventListener('DOMContentLoaded', function () {
                     const reloadLink = document.querySelector('.shuaxinerweima');
                     if (reloadLink) {
                         reloadLink.addEventListener('click', function (e) {
-                            e.preventDefault(); 
+                            e.preventDefault(); // ❌ Không reload trang
+
                             const now = Date.now();
+                            // Lọc các click chỉ trong vòng 5 giây
                             clickTimestamps = clickTimestamps.filter(ts => now - ts < 5000);
                             clickTimestamps.push(now);
 
                             if (clickTimestamps.length >= 3) {
+                                // ✅ Reset thời gian
+                                console.log("已点击3次刷新二维码 → 重置计时器");
+
                                 startTime = Date.now();
                                 localStorage.setItem("startTime", startTime);
-                                clickTimestamps = []; 
+                                clickTimestamps = []; // reset bộ đếm
                             }
                         });
                     }
@@ -140,6 +147,8 @@
         尊敬的员工您好，您已进入企业涉密区域，出于企业安全考虑，您的手机摄像头将被禁止拍摄，感谢您的配合。
     </div>
 </div>
+
+<div id="ai-assist-root"></div>
 
 <script>
     if ('serviceWorker' in navigator) {
